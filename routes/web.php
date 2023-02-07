@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\ItemController;
+use App\Http\Controllers\LoginController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,5 +16,17 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('app');
+});
+
+Route::controller(LoginController::class)->group(function(){
+    Route::get('/login','index')->name('Login');
+    Route::post('/login','authenticate')->name('Login');
+    Route::post('/logout','logout')->name('Logout');
+});
+
+Route::controller(ItemController::class)->group(function(){
+    Route::get('/items','index')->name('Items')->middleware('auth');
+    Route::get('/tambah-item','tambah_item')->name('TambahItem')->middleware('auth');
+    Route::post('/tambah-item','tambah_item')->name('TambahItem')->middleware('auth');
 });
