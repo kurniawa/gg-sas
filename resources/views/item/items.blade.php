@@ -6,7 +6,7 @@
         <h3>Stok Items</h3>
     </div>
     <div>
-        <a href="{{ route('TambahItem') }}" class="btn-emerald rounded">+Tambah Stok</a>
+        <a href="{{ route('items.create') }}" class="btn-emerald rounded">+Tambah Stok</a>
     </div>
 </div>
 <table class="table-nice">

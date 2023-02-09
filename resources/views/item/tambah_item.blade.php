@@ -4,8 +4,15 @@
 <div class="p-2">
     <h3>+Tambah Item</h3>
 </div>
-<form method="post" action="{{ route('TambahItem') }}" class="m-2"
-    x-data="{item:{tipe_barang:'perhiasan',tipe_perhiasan:''}}"
+<form method="post" action="{{ route('items.store') }}" class="m-2"
+    x-data="{
+        item:{
+            tipe_barang:'perhiasan',
+            tipe_perhiasan:'',
+            nampan:'NONE',
+            mata:[],
+        }
+    }"
     >
     @csrf
     <div class="flex">
@@ -41,18 +48,61 @@
         </template>
     </div>
     <template x-if="item.tipe_barang==='perhiasan'">
-        <div class="flex mt-1 items-center">
-            <div>
+        <div>
+
+            <div class="flex mt-1 items-center">
                 <div>
-                    <label for="" class="block">Range Usia:</label>
-                    <select class="input" onchange="generatingNama()">
-                        <option value="">-</option>
-                        @foreach ($range_usias as $range_usia)
-                        <option value={{ $range_usia->nama }}>{{ $range_usia->nama }}</option>
-                        @endforeach
-                    </select>
+                    <div>
+                        <label for="" class="block">Range Usia:</label>
+                        <select class="input" onchange="generatingNama()" name="range_usia">
+                            <option value="">-</option>
+                            @foreach ($range_usias as $range_usia)
+                            <option value={{ $range_usia->nama }}>{{ $range_usia->nama }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    @error('range_usia')
+                    <div class="text-pink-600">{{ $message }}</div>
+                    @enderror
                 </div>
-                <div class="text-pink-600">{logs_validasi.range_usia.message}</div>
+                <div class="ml-1">
+                    <div>
+                        <label for="" class="block">Warna Emas:</label>
+                        <select class="input" on:change={generatingNama} name="warna_emas">
+                            <option value="">-</option>
+                            @foreach ($warna_emass as $warna_emas)
+                            <option value={{ $warna_emas->nama }}>{{ $warna_emas->nama }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    @error('warna_emas')
+                    <div class="text-pink-600">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div class="ml-1">
+                    <div>
+                        <label for="" class="block">Nampan:</label>
+                        <select class="input" on:change={generatingNama} name="nampan" x-bind:value="item.nampan">
+                            @foreach ($nampans as $nampan)
+                            <option value={{ $nampan->nama }}>{{ $nampan->codename }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    @error('nampan')
+                    <div class="text-pink-600">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
+            <x-item.mata :matas="$matas"></x-item.mata>
+
+            <x-item.mainan :mainans="$mainans"></x-item.mainan>
+            <div class="mt-2">
+                <button
+                    type="submit"
+                    class="bg-violet-500 py-4 rounded w-full text-center text-white font-bold"
+                >
+                    +Tambah ke Stock
+                </button>
             </div>
         </div>
     </template>
@@ -85,8 +135,6 @@
             <Nampan bind:item />
         </div>
 
-        <Mata bind:item />
-        <span class="text-pink-600">{logs_validasi.mata.message}</span>
         <Mainan bind:item />
         <span class="text-pink-600">{logs_validasi.mainan.message}</span>
         <div class="flex">
@@ -264,7 +312,7 @@
     // console.log(specs);
     let jenis_perhiasan=[];
     function setOpsiJenisPerhiasan(kode_tipe) {
-        console.log(kode_tipe);
+        // console.log(kode_tipe);
         let results;
         if (kode_tipe!=='') {
             results=specs.filter(spec=>spec.kategori==='tipe_perhiasan'&&spec.kode_tipe===kode_tipe);
@@ -276,7 +324,7 @@
                 id:res.id
             });
         });
-        console.log('jenis_perhiasan',jenis_perhiasan);
+        // console.log('jenis_perhiasan',jenis_perhiasan);
         setAutocompleteJenisPerhiasan();
     }
 

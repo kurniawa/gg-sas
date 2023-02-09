@@ -2,7 +2,7 @@
 @section('title','GL.SAS')
 <x-navbar></x-navbar>
 @section('content')
-<form action="{{ route('Login') }}" method="POST" class="p-5 border rounded border-slate-300 mx-5 mt-11">
+<form action="{{ route('login') }}" method="POST" class="p-5 border rounded border-slate-300 mx-5 mt-11">
     @csrf
 	<div class="flex justify-center border-b pb-7">
 		<h3 class="text-slate-700">Login</h3>

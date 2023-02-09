@@ -1,19 +1,20 @@
 <?php
 
-namespace App\View\Components;
+namespace App\View\Components\Item;
 
 use Illuminate\View\Component;
 
-class item.jenis-perhiasan extends Component
+class Mainan extends Component
 {
+    public $mainans;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($mainans)
     {
-        //
+        $this->mainans=$mainans;
     }
 
     /**
@@ -23,6 +24,6 @@ class item.jenis-perhiasan extends Component
      */
     public function render()
     {
-        return view('components.item.jenis-perhiasan');
+        return view('components.item.mainan');
     }
 }

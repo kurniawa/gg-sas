@@ -38,7 +38,7 @@
 
                 @endif
                 <li>
-                    <form action="{{ route('Logout') }}" method="post" class="m-0">
+                    <form action="{{ route('logout') }}" method="post" class="m-0">
                     @csrf
                     <button class="flex items-center w-48 px-5 py-3 hover:bg-slate-100 rounded">
                         <svg

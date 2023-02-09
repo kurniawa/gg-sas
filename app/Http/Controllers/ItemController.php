@@ -22,17 +22,6 @@ class ItemController extends Controller
         return view('item.items',$data);
     }
 
-    public function tambah_item()
-    {
-        $specs=Spec::all();
-        $range_usias = $specs->where('kategori','range_usia');
-        $data = [
-            'specs'=>$specs,
-            'range_usias'=>$range_usias,
-        ];
-        return view('item.tambah_item',$data);
-    }
-
     /**
      * Show the form for creating a new resource.
      *
@@ -40,7 +29,22 @@ class ItemController extends Controller
      */
     public function create()
     {
-        //
+        $specs=Spec::all();
+        $range_usias = $specs->where('kategori','range_usia');
+        $warna_emass = $specs->where('kategori','warna_emas');
+        $nampans = $specs->where('kategori','nampan');
+        $matas = array_values($specs->where('kategori','mata')->toArray());
+        $mainans = array_values($specs->where('kategori','mainan')->toArray());
+        // dd($mainans);
+        $data = [
+            'specs'=>$specs,
+            'range_usias'=>$range_usias,
+            'warna_emass'=>$warna_emass,
+            'nampans'=>$nampans,
+            'matas'=>$matas,
+            'mainans'=>$mainans,
+        ];
+        return view('item.tambah_item',$data);
     }
 
     /**
@@ -51,7 +55,8 @@ class ItemController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $post = $request->post();
+        dd($post);
     }
 
     /**

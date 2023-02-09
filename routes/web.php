@@ -20,13 +20,9 @@ Route::get('/', function () {
 });
 
 Route::controller(LoginController::class)->group(function(){
-    Route::get('/login','index')->name('Login');
-    Route::post('/login','authenticate')->name('Login');
-    Route::post('/logout','logout')->name('Logout');
+    Route::get('/login','index')->name('login');
+    Route::post('/login','authenticate')->name('login');
+    Route::post('/logout','logout')->name('logout');
 });
 
-Route::controller(ItemController::class)->group(function(){
-    Route::get('/items','index')->name('Items')->middleware('auth');
-    Route::get('/tambah-item','tambah_item')->name('TambahItem')->middleware('auth');
-    Route::post('/tambah-item','tambah_item')->name('TambahItem')->middleware('auth');
-});
+Route::resource('items',ItemController::class)->middleware('auth');
