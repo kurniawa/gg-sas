@@ -35,7 +35,9 @@ class ItemController extends Controller
         $nampans = $specs->where('kategori','nampan');
         $matas = array_values($specs->where('kategori','mata')->toArray());
         $mainans = array_values($specs->where('kategori','mainan')->toArray());
-        // dd($mainans);
+        $caps = array_values($specs->where('kategori','cap')->toArray());
+        $kondisis = array_values($specs->where('kategori','kondisi')->toArray());
+        // dd($caps);
         $data = [
             'specs'=>$specs,
             'range_usias'=>$range_usias,
@@ -43,6 +45,8 @@ class ItemController extends Controller
             'nampans'=>$nampans,
             'matas'=>$matas,
             'mainans'=>$mainans,
+            'caps'=>$caps,
+            'kondisis'=>$kondisis,
         ];
         return view('item.tambah_item',$data);
     }
@@ -55,8 +59,13 @@ class ItemController extends Controller
      */
     public function store(Request $request)
     {
+        // $validatedData = $request->validate([
+        //     'item_photo' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+        //    ]);
         $post = $request->post();
-        dd($post);
+        dump($post);
+        $file = $request->file();
+        dd($file);
     }
 
     /**

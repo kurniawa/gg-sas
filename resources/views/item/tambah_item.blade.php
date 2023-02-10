@@ -4,7 +4,7 @@
 <div class="p-2">
     <h3>+Tambah Item</h3>
 </div>
-<form method="post" action="{{ route('items.store') }}" class="m-2"
+<form method="post" action="{{ route('items.store') }}" class="m-2" enctype="multipart/form-data"
     x-data="{
         item:{
             tipe_barang:'perhiasan',
@@ -49,7 +49,6 @@
     </div>
     <template x-if="item.tipe_barang==='perhiasan'">
         <div>
-
             <div class="flex mt-1 items-center">
                 <div>
                     <div>
@@ -96,113 +95,70 @@
             <x-item.mata :matas="$matas"></x-item.mata>
 
             <x-item.mainan :mainans="$mainans"></x-item.mainan>
-            <div class="mt-2">
-                <button
-                    type="submit"
-                    class="bg-violet-500 py-4 rounded w-full text-center text-white font-bold"
-                >
-                    +Tambah ke Stock
-                </button>
+
+            <div class="flex">
+                <x-item.plat></x-item.plat>
+                <x-item.ukuran></x-item.ukuran>
+            </div>
+            <div class="flex mt-1 items-center">
+                <div>
+                    <div>
+                        <label for="" class="block">Kadar(%):</label>
+                        <input
+                            type="number"
+                            class="input w-11/12"
+                            step="any"
+                            placeholder="Kadar"
+                            bind:value={item.kadar}
+                            on:keyup={generatingNama}
+                        />
+                    </div>
+                    @error('kadar')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div>
+                    <div>
+                        <label for="" class="block">Berat(g):</label>
+                        <input
+                            type="number"
+                            class="input w-11/12"
+                            placeholder="Berat"
+                            onkeyup="generatingNama()"
+                            step="any"
+                        />
+                    </div>
+                    @error('berat')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+                <x-item.cap :caps="$caps"></x-item.cap>
+                <x-item.kondisi :kondisis="$kondisis"></x-item.kondisi>
+            </div>
+            <div class="flex mt-1">
+                <div>
+                    <label for="">Keterangan(opt.):</label>
+                    <input type="text" class="input" placeholder="Keterangan(opt.)" />
+                </div>
+                <div>
+                    <div>
+                        <label for="" class="block">Stok:</label>
+                        <input type="number" class="input w-11/12" placeholder="Stok" step="1" />
+                    </div>
+                    @error('stok')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
             </div>
         </div>
     </template>
+    <x-item.photos></x-item.photos>
+    <div class="mt-2">
+        <button type="submit" class="bg-violet-500 py-4 rounded w-full text-center text-white font-bold">
+            +Tambah ke Stock
+        </button>
+    </div>
     {{-- {#if item.tipe_barang === 'perhiasan'}
-        <div class="flex mt-1 items-center">
-            <div>
-                <div>
-                    <label for="" class="block">Range Usia:</label>
-                    <select bind:value={item.range_usia} class="input" on:change={generatingNama}>
-                        <option value="">-</option>
-                        {#each haystack_range_usia as item}
-                            <option value={item}>{item}</option>
-                        {/each}
-                    </select>
-                </div>
-                <div class="text-pink-600">{logs_validasi.range_usia.message}</div>
-            </div>
-            <div class="ml-1">
-                <div>
-                    <label for="" class="block">Warna Emas:</label>
-                    <select bind:value={item.warna_emas} class="input" on:change={generatingNama}>
-                        <option value="">-</option>
-                        {#each haystack_warna_emas as item}
-                            <option value={item}>{item}</option>
-                        {/each}
-                    </select>
-                </div>
-                <div class="text-pink-600">{logs_validasi.warna_emas.message}</div>
-            </div>
-            <Nampan bind:item />
-        </div>
-
-        <Mainan bind:item />
-        <span class="text-pink-600">{logs_validasi.mainan.message}</span>
-        <div class="flex">
-            <div class="w-full">
-                <Plat bind:item />
-                <span class="text-pink-600">{logs_validasi.plat.message}</span>
-            </div>
-            <div class="w-full ml-1">
-                <Ukuran bind:item />
-                <span class="text-pink-600">{logs_validasi.ukuran.message}</span>
-            </div>
-        </div>
-        <div class="flex mt-1 items-center">
-            <div>
-                <div>
-                    <label for="" class="block">Kadar(%):</label>
-                    <input
-                        type="number"
-                        class="input w-11/12"
-                        step="any"
-                        placeholder="Kadar"
-                        bind:value={item.kadar}
-                        on:keyup={generatingNama}
-                    />
-                </div>
-                <div class="text-pink-600">{logs_validasi.kadar.message}</div>
-            </div>
-            <div>
-                <div>
-                    <label for="" class="block">Berat(g):</label>
-                    <input
-                        type="number"
-                        class="input w-11/12"
-                        placeholder="Berat"
-                        bind:value={item.berat}
-                        on:keyup={generatingNama}
-                        step="any"
-                    />
-                </div>
-                <div class="text-pink-600">{logs_validasi.berat.message}</div>
-            </div>
-            <Cap bind:item />
-            <Condition bind:item />
-        </div>
-        <div class="flex mt-1">
-            <div>
-                <label for="">Keterangan(opt.):</label>
-                <input
-                    type="text"
-                    class="input"
-                    bind:value={item.keterangan}
-                    placeholder="Keterangan(opt.)"
-                />
-            </div>
-            <div>
-                <div>
-                    <label for="" class="block">Stok:</label>
-                    <input
-                        type="number"
-                        class="input w-11/12"
-                        placeholder="Stok"
-                        bind:value={item.stok}
-                        step="1"
-                    />
-                </div>
-                <div class="text-pink-600">{logs_validasi.stok.message}</div>
-            </div>
-        </div>
     {/if}
     <ItemPhoto />
 

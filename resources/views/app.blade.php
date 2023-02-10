@@ -4,7 +4,7 @@
 @auth
 <div class="grid grid-cols-3 gap-2 mx-5 mt-5">
     <a
-        href="{{ route('Items') }}"
+        href="{{ route('items.index') }}"
         class="bg-indigo-400 shadow drop-shadow rounded hover:bg-emerald-500"
     >
         <div class="flex items-center h-3/4 justify-center">
@@ -32,7 +32,7 @@
         </div>
     </a>
     <a
-        href="{{ route('Items') }}"
+        href="{{ route('items.index') }}"
         class="bg-indigo-400 shadow drop-shadow rounded hover:bg-emerald-500"
     >
         <div class="flex items-center h-3/4 justify-center">

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\PelangganController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,3 +27,4 @@ Route::controller(LoginController::class)->group(function(){
 });
 
 Route::resource('items',ItemController::class)->middleware('auth');
+Route::resource('pelanggans',PelangganController::class)->middleware('auth');
