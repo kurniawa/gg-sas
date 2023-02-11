@@ -55,7 +55,7 @@
                         id="input-mainan-${i}"
                         type="text"
                         placeholder="Mainan"
-                        class="input w-11/12"
+                        class="input w-11/12 mainan"
                         name="mainan[]"
                         onkeyup="memorizeValue_mainan(${i},'mainan',this.value)"
                         value="${data_mainan[i].mainan}"
@@ -65,7 +65,7 @@
                     <input
                         type="number"
                         placeholder="Jumlah"
-                        class="input w-11/12 ml-1"
+                        class="input w-11/12 ml-1 jumlah_mainan"
                         name="jumlah_mainan[]"
                         onkeyup="memorizeValue_mainan(${i},'jumlah',this.value)"
                         value="${data_mainan[i].jumlah}"

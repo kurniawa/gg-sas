@@ -30,18 +30,32 @@ class ItemController extends Controller
     public function create()
     {
         $specs=Spec::all();
-        $range_usias = $specs->where('kategori','range_usia');
-        $warna_emass = $specs->where('kategori','warna_emas');
-        $nampans = $specs->where('kategori','nampan');
+        $antings = array_values($specs->where('kategori','tipe_perhiasan')->where('tipe','Anting')->toArray());
+        $giwangs = array_values($specs->where('kategori','tipe_perhiasan')->where('tipe','Giwang')->toArray());
+        $cincins = array_values($specs->where('kategori','tipe_perhiasan')->where('tipe','Cincin')->toArray());
+        $kalungs = array_values($specs->where('kategori','tipe_perhiasan')->where('tipe','Kalung')->toArray());
+        $gelangrantais = array_values($specs->where('kategori','tipe_perhiasan')->where('tipe','Gelang Rantai')->toArray());
+        $gelangbulats = array_values($specs->where('kategori','tipe_perhiasan')->where('tipe','Gelang Bulat')->toArray());
+        $liontins = array_values($specs->where('kategori','tipe_perhiasan')->where('tipe','Liontin')->toArray());
+        $rangeusias = array_values($specs->where('kategori','range_usia')->toArray());
+        $warnaemass = array_values($specs->where('kategori','warna_emas')->toArray());
+        $nampans = array_values($specs->where('kategori','nampan')->toArray());
         $matas = array_values($specs->where('kategori','mata')->toArray());
         $mainans = array_values($specs->where('kategori','mainan')->toArray());
         $caps = array_values($specs->where('kategori','cap')->toArray());
         $kondisis = array_values($specs->where('kategori','kondisi')->toArray());
-        // dd($caps);
+        // dd($gelangrantais);
         $data = [
             'specs'=>$specs,
-            'range_usias'=>$range_usias,
-            'warna_emass'=>$warna_emass,
+            'antings'=>$antings,
+            'giwangs'=>$giwangs,
+            'cincins'=>$cincins,
+            'kalungs'=>$kalungs,
+            'gelangrantais'=>$gelangrantais,
+            'gelangbulats'=>$gelangbulats,
+            'liontins'=>$liontins,
+            'rangeusias'=>$rangeusias,
+            'warnaemass'=>$warnaemass,
             'nampans'=>$nampans,
             'matas'=>$matas,
             'mainans'=>$mainans,

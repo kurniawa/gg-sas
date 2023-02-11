@@ -55,7 +55,7 @@
                         id="input-warna-mata-${i}"
                         type="text"
                         placeholder="Warna"
-                        class="input w-11/12"
+                        class="input w-11/12 warna_mata"
                         name="warna_mata[]"
                         onkeyup="memorizeValue_mata(${i},'warna_mata',this.value)"
                         value="${dataMata[i].warna_mata}"
@@ -65,7 +65,7 @@
                     <input
                         type="number"
                         placeholder="Jumlah"
-                        class="input w-11/12 ml-1"
+                        class="input w-11/12 ml-1 jumlah_mata"
                         name="jumlah_mata[]"
                         onkeyup="memorizeValue_mata(${i},'jumlah',this.value)"
                         value="${dataMata[i].jumlah}"

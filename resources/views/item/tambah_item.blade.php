@@ -16,7 +16,7 @@
     >
     @csrf
     <div class="flex">
-        <select class="input" x-model="item.tipe_barang" name="tipe_barang">
+        <select id="tipe_barang" class="input" x-model="item.tipe_barang" name="tipe_barang">
             <option value="">-</option>
             <option value="perhiasan">Perhiasan</option>
             <option value="LM">LM</option>
@@ -24,6 +24,7 @@
         <template x-if="item.tipe_barang==='perhiasan'">
             <div class="ml-1 flex">
                 <select
+                    id="tipe_perhiasan"
                     name="tipe_perhiasan"
                     x-model="item.tipe_perhiasan"
                     onchange="setOpsiJenisPerhiasan(this.value)"
@@ -53,10 +54,10 @@
                 <div>
                     <div>
                         <label for="" class="block">Range Usia:</label>
-                        <select class="input" onchange="generatingNama()" name="range_usia">
+                        <select id="range_usia" class="input" onchange="generatingNama()" name="range_usia">
                             <option value="">-</option>
-                            @foreach ($range_usias as $range_usia)
-                            <option value={{ $range_usia->nama }}>{{ $range_usia->nama }}</option>
+                            @foreach ($rangeusias as $range_usia)
+                            <option value={{ $range_usia['nama'] }}>{{ $range_usia['nama'] }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -67,10 +68,10 @@
                 <div class="ml-1">
                     <div>
                         <label for="" class="block">Warna Emas:</label>
-                        <select class="input" on:change={generatingNama} name="warna_emas">
+                        <select id="warna_emas" class="input" on:change={generatingNama} name="warna_emas">
                             <option value="">-</option>
-                            @foreach ($warna_emass as $warna_emas)
-                            <option value={{ $warna_emas->nama }}>{{ $warna_emas->nama }}</option>
+                            @foreach ($warnaemass as $warna_emas)
+                            <option value={{ $warna_emas['nama'] }}>{{ $warna_emas['nama'] }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -81,9 +82,9 @@
                 <div class="ml-1">
                     <div>
                         <label for="" class="block">Nampan:</label>
-                        <select class="input" on:change={generatingNama} name="nampan" x-bind:value="item.nampan">
+                        <select id="nampan" class="input" on:change={generatingNama} name="nampan" x-bind:value="item.nampan">
                             @foreach ($nampans as $nampan)
-                            <option value={{ $nampan->nama }}>{{ $nampan->codename }}</option>
+                            <option value={{ $nampan['nama'] }}>{{ $nampan['codename'] }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -105,12 +106,12 @@
                     <div>
                         <label for="" class="block">Kadar(%):</label>
                         <input
+                            id="kadar"
                             type="number"
                             class="input w-11/12"
                             step="any"
                             placeholder="Kadar"
-                            bind:value={item.kadar}
-                            on:keyup={generatingNama}
+                            onkeyup="generatingNama()"
                         />
                     </div>
                     @error('kadar')
@@ -121,6 +122,7 @@
                     <div>
                         <label for="" class="block">Berat(g):</label>
                         <input
+                            id="berat"
                             type="number"
                             class="input w-11/12"
                             placeholder="Berat"
@@ -158,6 +160,12 @@
             +Tambah ke Stock
         </button>
     </div>
+    <x-item.codename :antings="$antings" :giwangs="$giwangs" :cincins="$cincins" :kalungs="$kalungs" :gelangrantais="$gelangrantais"
+    :gelangbulats="$gelangbulats" :liontins="$liontins"></x-item.codename>
+    {{-- <x-item.codename :antings="$antings" :giwangs="$giwangs" :cincins="$cincins" :kalungs="$kalungs" :gelangrantais="$gelangrantais"
+    :gelangbulats="$gelangbulats" :liontins="$liontins" :rangeusiasc="$rangeusiasc" :warnaemassc="$warnaemassc" :nampansc="$nampansc"
+    :matasc="$matasc" :mainansc="$mainansc" :capsc="$capsc" :kondisisc="$kondisisc"></x-item.codename> --}}
+    <button type="button" class="btn-warning" onclick="generateNama()">generateNama()</button>
     {{-- {#if item.tipe_barang === 'perhiasan'}
     {/if}
     <ItemPhoto />
