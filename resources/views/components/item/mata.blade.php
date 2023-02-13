@@ -21,17 +21,7 @@
     {/each} -->
 </div>
 <script>
-    const matas = {!! json_encode($matas,JSON_HEX_TAG) !!}
-    // matas = matas.filter(function(){return true;});
-    let label_matas=[];
-    matas.forEach(mata => {
-        label_matas.push({label:mata.nama,value:mata.nama,id:mata.id});
-    });
-    // console.log(matas);
-    // console.log(matas.length);
-    // console.log(label_matas);
-    let count_child_mata=0;
-    let dataMata=[];
+
     function addMata() {
         count_child_mata++;
         dataMata[count_child_mata-1]={warna_mata:'',jumlah:1};

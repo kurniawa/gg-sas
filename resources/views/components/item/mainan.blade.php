@@ -21,17 +21,6 @@
     {/each} -->
 </div>
 <script>
-    const mainans = {!! json_encode($mainans,JSON_HEX_TAG) !!}
-    // mainans = mainans.filter(function(){return true;});
-    let label_mainans=[];
-    mainans.forEach(mainan => {
-        label_mainans.push({label:mainan.nama,value:mainan.nama,id:mainan.id});
-    });
-    // console.log(mainans);
-    // console.log(mainans.length);
-    // console.log(label_mainans);
-    let count_child_mainan=0;
-    let data_mainan=[];
     function add_mainan() {
         count_child_mainan++;
         data_mainan[count_child_mainan-1]={mainan:'',jumlah:1};

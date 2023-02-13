@@ -16,6 +16,8 @@ class SpecSeeder extends Seeder
     public function run()
     {
         $specs = [
+            [ 'kategori'=>'tipe_barang','tipe'=>'Perhiasan','kode_tipe'=>7,'nomor_tipe'=>7,'nama'=> null, 'codename'=> 7, 'name_id'=>7 ],
+            [ 'kategori'=>'tipe_barang','tipe'=>'LM','kode_tipe'=>8,'nomor_tipe'=>8,'nama'=> null, 'codename'=> 8, 'name_id'=>8 ],
             [ 'kategori'=>'tipe_perhiasan','tipe'=>'Anting','kode_tipe'=>'AT','nomor_tipe'=>1,'nama'=> 'Desy', 'codename'=> 'Des', 'name_id'=> 1 ],
 			[ 'kategori'=>'tipe_perhiasan','tipe'=>'Anting','kode_tipe'=>'AT','nomor_tipe'=>1,'nama'=> 'Desy Polos', 'codename'=> 'DesP', 'name_id'=> 2 ],
 			[ 'kategori'=>'tipe_perhiasan','tipe'=>'Anting','kode_tipe'=>'AT','nomor_tipe'=>1,'nama'=> 'Gipsy', 'codename'=> 'Gip', 'name_id'=> 3 ],
@@ -205,11 +207,24 @@ class SpecSeeder extends Seeder
             [ 'kategori'=>'cap','tipe'=>null,'kode_tipe'=>null,'nomor_tipe'=>null,'nama'=>'gRoaster', 'name_id'=> 22, 'codename'=> 'c.gRoaster' ],
             [ 'kategori'=>'cap','tipe'=>null,'kode_tipe'=>null,'nomor_tipe'=>null,'nama'=>'gSBintang', 'name_id'=> 23, 'codename'=> 'c.gSBin' ],
             [ 'kategori'=>'kondisi','tipe'=>null,'kode_tipe'=>null,'nomor_tipe'=>null,'nama'=> 'MULUS', 'name_id'=> 99, 'codename'=> 'MULUS' ],
-            [ 'kategori'=>'kondisi','tipe'=>null,'kode_tipe'=>null,'nomor_tipe'=>null,'nama'=> '9', 'name_id'=> 9, 'codename'=> 'sh.9' ],
-            [ 'kategori'=>'kondisi','tipe'=>null,'kode_tipe'=>null,'nomor_tipe'=>null,'nama'=> '8', 'name_id'=> 8, 'codename'=> 'sh.8' ],
-            [ 'kategori'=>'kondisi','tipe'=>null,'kode_tipe'=>null,'nomor_tipe'=>null,'nama'=> '7', 'name_id'=> 7, 'codename'=> 'sh.7' ],
-            [ 'kategori'=>'kondisi','tipe'=>null,'kode_tipe'=>null,'nomor_tipe'=>null,'nama'=> '6', 'name_id'=> 6, 'codename'=> 'sh.6' ],
-            [ 'kategori'=>'kondisi','tipe'=>null,'kode_tipe'=>null,'nomor_tipe'=>null,'nama'=> '5', 'name_id'=> 5, 'codename'=> 'sh.5' ]
+            [ 'kategori'=>'kondisi','tipe'=>null,'kode_tipe'=>null,'nomor_tipe'=>null,'nama'=> '9', 'name_id'=> 9, 'codename'=> 'k.9' ],
+            [ 'kategori'=>'kondisi','tipe'=>null,'kode_tipe'=>null,'nomor_tipe'=>null,'nama'=> '8', 'name_id'=> 8, 'codename'=> 'k.8' ],
+            [ 'kategori'=>'kondisi','tipe'=>null,'kode_tipe'=>null,'nomor_tipe'=>null,'nama'=> '7', 'name_id'=> 7, 'codename'=> 'k.7' ],
+            [ 'kategori'=>'kondisi','tipe'=>null,'kode_tipe'=>null,'nomor_tipe'=>null,'nama'=> '6', 'name_id'=> 6, 'codename'=> 'k.6' ],
+            [ 'kategori'=>'kondisi','tipe'=>null,'kode_tipe'=>null,'nomor_tipe'=>null,'nama'=> '5', 'name_id'=> 5, 'codename'=> 'k.5' ],
+            [ 'kategori'=>'kadar','tipe'=>null,'kode_tipe'=>null,'nomor_tipe'=>null,'nama'=> '30', 'name_id'=> 1, 'codename'=>'30' ],
+            [ 'kategori'=>'kadar','tipe'=>null,'kode_tipe'=>null,'nomor_tipe'=>null,'nama'=> '35', 'name_id'=> 2, 'codename'=>'35' ],
+            [ 'kategori'=>'kadar','tipe'=>null,'kode_tipe'=>null,'nomor_tipe'=>null,'nama'=> '37.5', 'name_id'=> 3, 'codename'=>'37.5' ],
+            [ 'kategori'=>'kadar','tipe'=>null,'kode_tipe'=>null,'nomor_tipe'=>null,'nama'=> '40', 'name_id'=> 5, 'codename'=>'40' ],
+            [ 'kategori'=>'kadar','tipe'=>null,'kode_tipe'=>null,'nomor_tipe'=>null,'nama'=> '42', 'name_id'=> 6, 'codename'=>'42' ],
+            [ 'kategori'=>'kadar','tipe'=>null,'kode_tipe'=>null,'nomor_tipe'=>null,'nama'=> '45', 'name_id'=> 7, 'codename'=>'45' ],
+            [ 'kategori'=>'kadar','tipe'=>null,'kode_tipe'=>null,'nomor_tipe'=>null,'nama'=> '48', 'name_id'=> 8, 'codename'=>'48' ],
+            [ 'kategori'=>'kadar','tipe'=>null,'kode_tipe'=>null,'nomor_tipe'=>null,'nama'=> '50', 'name_id'=> 9, 'codename'=>'50' ],
+            [ 'kategori'=>'kadar','tipe'=>null,'kode_tipe'=>null,'nomor_tipe'=>null,'nama'=> '70', 'name_id'=> 10, 'codename'=>'70' ],
+            [ 'kategori'=>'kadar','tipe'=>null,'kode_tipe'=>null,'nomor_tipe'=>null,'nama'=> '75', 'name_id'=> 11, 'codename'=>'75' ],
+            [ 'kategori'=>'kadar','tipe'=>null,'kode_tipe'=>null,'nomor_tipe'=>null,'nama'=> '95', 'name_id'=> 12, 'codename'=>'95' ],
+            [ 'kategori'=>'merek','tipe'=>null,'kode_tipe'=>null,'nomor_tipe'=>null,'nama'=> 'UBS', 'name_id'=> 1, 'codename'=>'merk.UBS' ],
+            [ 'kategori'=>'merek','tipe'=>null,'kode_tipe'=>null,'nomor_tipe'=>null,'nama'=> 'Antam', 'name_id'=> 2, 'codename'=>'merk.Antam' ],
         ];
         for ($i = 0; $i < count($specs); $i++) {
             Spec::create([

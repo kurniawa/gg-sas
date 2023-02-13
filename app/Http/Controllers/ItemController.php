@@ -30,6 +30,7 @@ class ItemController extends Controller
     public function create()
     {
         $specs=Spec::all();
+        $tipe_barangs = array_values($specs->where('kategori','tipe_barang')->toArray());
         $antings = array_values($specs->where('kategori','tipe_perhiasan')->where('tipe','Anting')->toArray());
         $giwangs = array_values($specs->where('kategori','tipe_perhiasan')->where('tipe','Giwang')->toArray());
         $cincins = array_values($specs->where('kategori','tipe_perhiasan')->where('tipe','Cincin')->toArray());
@@ -43,10 +44,23 @@ class ItemController extends Controller
         $matas = array_values($specs->where('kategori','mata')->toArray());
         $mainans = array_values($specs->where('kategori','mainan')->toArray());
         $caps = array_values($specs->where('kategori','cap')->toArray());
-        $kondisis = array_values($specs->where('kategori','kondisi')->toArray());
+        $kondisis = $specs->where('kategori','kondisi');
+        $tipejeniss=array_values($specs->where('kategori','tipe_perhiasan')->groupBy('tipe')->toArray());
+        $tipeperhiasans=[];
+        $kodetipeperhiasans=[];
+        $nomortipeperhiasans=[];
+        for ($i=0; $i < count($tipejeniss); $i++) {
+            $tipeperhiasans[]=$tipejeniss[$i][0]['tipe'];
+            $kodetipeperhiasans[]=$tipejeniss[$i][0]['kode_tipe'];
+            $nomortipeperhiasans[]=$tipejeniss[$i][0]['nomor_tipe'];
+        }
+        $jenisperhiasans=array_values($specs->where('kategori','tipe_perhiasan')->toArray());
+        $kadars=$specs->where('kategori','kadar');
+        // dd($tipeperhiasans);
         // dd($gelangrantais);
         $data = [
             'specs'=>$specs,
+            'tipe_barangs'=>$tipe_barangs,
             'antings'=>$antings,
             'giwangs'=>$giwangs,
             'cincins'=>$cincins,
@@ -61,6 +75,11 @@ class ItemController extends Controller
             'mainans'=>$mainans,
             'caps'=>$caps,
             'kondisis'=>$kondisis,
+            'tipeperhiasans'=>$tipeperhiasans,
+            'kodetipeperhiasans'=>$kodetipeperhiasans,
+            'nomortipeperhiasans'=>$nomortipeperhiasans,
+            'jenisperhiasans'=>$jenisperhiasans,
+            'kadars'=>$kadars,
         ];
         return view('item.tambah_item',$data);
     }
@@ -76,10 +95,50 @@ class ItemController extends Controller
         // $validatedData = $request->validate([
         //     'item_photo' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
         //    ]);
+        $request->validate([
+            'tipe_barang'=>'required',
+            'item_photo' => 'array',
+            'item_photo.*' => 'image|mimes:jpg,png,jpeg|max:2048',
+        ]);
         $post = $request->post();
-        dump($post);
         $file = $request->file();
+
+        if ($post['tipe_barang']==='Perhiasan') {
+            $item=$request->validate([
+                'tipe_barang'=>'required|string',
+                'tipe_perhiasan'=>'required|string',
+                'jenis_perhiasan'=>'required|string',
+                'plat'=>'nullable|numeric',
+                'cap'=>'nullable|string',
+                'ukuran'=>'nullable|numeric',
+                'nampan'=>'nullable|string',
+                'merek'=>'nullable|string',
+                'kadar'=>'required|numeric',
+                'berat'=>'required|numeric',
+                'kondisi'=>'nullable|string',
+                'nama'=>'required|string',
+                'specs'=>'required|string',
+                'stok'=>'required|numeric',
+                'kode_item'=>'required|string',
+                'barcode'=>'required|numeric',
+                'keterangan'=>'nullable|string',
+            ]);
+            // $item_mata = $request->validate([
+            //     'warna_mata'=>'nullable|array',
+            //     'jumlah_mata'=>'nullable|array',
+            //     'warna_mata.*'=>'string',
+            //     'jumlah_mata.*'=>'numeric',
+            // ]);
+            // $item_mainan = $request->validate([
+            //     'mainan'=>'nullable|array',
+            //     'jumlah_mainan'=>'nullable|array',
+            //     'mainan.*'=>'string',
+            //     'jumlah_mainan.*'=>'numeric',
+            // ]);
+        }
+        dump($post);
         dd($file);
+        $new_item = Item::create($item);
     }
 
     /**
