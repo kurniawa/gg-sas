@@ -13,9 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('item_mainans', function (Blueprint $table) {
+        Schema::create('item_specs', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->foreignId('item_id')->constrained()->onDelete('CASCADE');
+            $table->foreignId('spec_id')->nullable()->constrained()->onDelete('SET NULL'); // Kalau spec ada yang di delete, ini ga ikut di delete
+            $table->string('kategori',50);
+            $table->smallInteger('jumlah');
         });
     }
 
@@ -26,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('item_mainans');
+        Schema::dropIfExists('item_specs');
     }
 };

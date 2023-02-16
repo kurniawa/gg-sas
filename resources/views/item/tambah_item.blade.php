@@ -134,6 +134,7 @@
             </div>
         </div>
     </template>
+    <input type="hidden" name="gol_kadar" id="gol_kadar">
     <x-item.photos></x-item.photos>
     @error('tipe_barang')
     <div class="invalid-feedback">{{ $message }}</div>
@@ -196,9 +197,6 @@
     <div class="invalid-feedback">{{ $message }}</div>
     @enderror
     @error('kode_item')
-    <div class="invalid-feedback">{{ $message }}</div>
-    @enderror
-    @error('barcode')
     <div class="invalid-feedback">{{ $message }}</div>
     @enderror
     @error('keterangan')

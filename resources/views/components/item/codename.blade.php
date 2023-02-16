@@ -53,6 +53,8 @@
     let arr_kadar=[];
     let arr_kadar_id=[];
     let arr_kadar_codename=[];
+    let arr_nampan_id=[];
+    let arr_nampan_codename=[];
     setTimeout(() => {
         const ds_tipe_barang=specs.filter((element)=>element.kategori==='tipe_barang');
         // console.log(ds_tipe_barang);
@@ -115,6 +117,12 @@
             arr_kadar_codename.push(element.codename);
         });
         // console.log(arr_kadar,arr_kadar_id,arr_kadar_codename);
+        const ds_nampan=specs.filter((element)=>element.kategori==='nampan');
+        ds_nampan.forEach(element => {
+            arr_nampan_id.push(element.name_id);
+            arr_nampan_codename.push(element.codename);
+        });
+        // console.log(arr_nampan_id,arr_nampan_codename);
 
     }, 1000);
 
@@ -144,6 +152,7 @@
         const jumlah_matas = document.querySelectorAll('.jumlah_mata');
 
         const kadar = document.getElementById('kadar');
+        const gol_kadar = document.getElementById('gol_kadar');
         const berat = document.getElementById('berat');
         const cap = document.getElementById('input-cap');
         const kondisi = document.getElementById('kondisi');
@@ -330,8 +339,19 @@
                 c_kadar='-400';
             }
         }
+        // 10 - GOL. KADAR
+        let gol_kadar_value;
+        if (kadar.value < 70) {
+            gol_kadar_value = 'MUDA';
+        } else if (kadar.value < 90) {
+            gol_kadar_value = 'BAGUS';
+        } else if (kadar.value <= 100) {
+            gol_kadar_value = 'TUA';
+        }
+        gol_kadar.value=gol_kadar_value;
+        console.log(gol_kadar.value);
 
-        // 10 - Berat
+        // 11 - Berat
         let n_berat;
         let s_berat;
         let c_berat;
@@ -345,7 +365,7 @@
             c_berat=`-${berat.value}`;
         }
 
-        // 11 - Cap
+        // 12 - Cap
         let s_cap;
         let c_cap;
         if (cap.value!=='') {
@@ -361,7 +381,7 @@
             c_cap = '-0';
         }
 
-        // 12 - Kondisi
+        // 13 - Kondisi
         let s_kondisi;
         let c_kondisi;
         if (kondisi.value!=='') {
@@ -377,11 +397,26 @@
             c_kondisi = '-0';
         }
 
-        // PENETAPAN NAMA
+        // 14 - NAMPAN
+        let s_nampan;
+        let c_nampan;
+        if (nampan.value!=='') {
+            if (arr_nampan_codename.includes(nampan.value)) {
+                s_nampan = ` ${arr_nampan_codename[arr_nampan_codename.indexOf(nampan.value)]}`;
+                c_nampan =`-${arr_nampan_id[arr_nampan_codename.indexOf(nampan.value)]}`;
+            } else {
+                s_nampan = ' n.ERR';
+                c_nampan = '-400';
+            }
+        } else {
+            s_nampan = ' n.-';
+            c_nampan = '-0';
+        }
+
+        // PENETAPAN NAMA + CODE
         let nama_item=n_tipe_barang+n_tipe_perhiasan+n_jenis_perhiasan+n_mata+n_mainan+n_plat+n_ukuran+n_kadar+n_berat;
-        let specs_item=n_range_usia+n_warna_emas+s_mata+s_mainan+s_plat+s_ukuran+s_kadar+s_berat+s_cap+s_kondisi;
-        let codename_item=c_tipe_barang+c_tipe_perhiasan+c_jenis_perhiasan+c_range_usia+c_warna_emas+c_mata+c_mainan+c_plat+c_ukuran+c_kadar+c_berat+c_cap+c_kondisi;
-        let barcode_item='';
+        let specs_item=n_range_usia+n_warna_emas+s_mata+s_mainan+s_plat+s_ukuran+s_kadar+s_berat+s_cap+s_kondisi+s_nampan;
+        let codename_item=c_tipe_barang+c_tipe_perhiasan+c_jenis_perhiasan+c_range_usia+c_warna_emas+c_mata+c_mainan+c_plat+c_ukuran+c_kadar+c_berat+c_cap+c_kondisi+c_nampan;
 
         // console.log(tipeperhiasans)
         el_nama_item.value=nama_item;
