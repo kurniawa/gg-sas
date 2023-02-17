@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Item;
+use App\Models\ItemPhoto;
 use App\Models\ItemSpec;
 use App\Models\Spec;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ItemController extends Controller
 {
@@ -17,13 +19,18 @@ class ItemController extends Controller
     public function index()
     {
         $items=Item::orderBy('tipe_barang')->orderBy('nama')->get();
+        $arr_item_photos=[];
         $item_matas=[];
         foreach ($items as $item) {
-            $item_spec=ItemSpec::where('item_id',$item->id);
+            $item_spec=ItemSpec::where('item_id',$item->id)->get();
+            $item_photos=ItemPhoto::where('item_id',$item->id)->get();
+            $arr_item_photos[]=$item_photos;
         }
         $data=[
-            'items'=>$items
+            'items'=>$items,
+            'arr_item_photos'=>$arr_item_photos
         ];
+        // dd($data);
         return view('item.items',$data);
     }
 
@@ -61,6 +68,7 @@ class ItemController extends Controller
         }
         $jenisperhiasans=array_values($specs->where('kategori','tipe_perhiasan')->toArray());
         $kadars=$specs->where('kategori','kadar');
+        $mereks=$specs->where('kategori','merek');
         // dd($tipeperhiasans);
         // dd($gelangrantais);
         $data = [
@@ -85,6 +93,7 @@ class ItemController extends Controller
             'nomortipeperhiasans'=>$nomortipeperhiasans,
             'jenisperhiasans'=>$jenisperhiasans,
             'kadars'=>$kadars,
+            'mereks'=>$mereks,
         ];
         return view('item.tambah_item',$data);
     }
@@ -106,7 +115,6 @@ class ItemController extends Controller
             'item_photo.*' => 'image|mimes:jpg,png,jpeg|max:2048',
         ]);
         $post = $request->post();
-        $file = $request->file();
 
         if ($post['tipe_barang']==='Perhiasan') {
             $item=$request->validate([
@@ -181,10 +189,35 @@ class ItemController extends Controller
         $new_item->barcode=$barcode;
         $new_item->save();
         $success_ .= ' Barcode diupdate!';
+
+        // UPLOAD PHOTO - IF EXIST
+        $files = $request->file('item_photo');
+        // dd($files[1]);
+        if (count($files)!==0) {
+            foreach ($files as $file) {
+                $photo_name="PP-". uniqid() . "." . $file->getClientOriginalExtension();
+                // $path = Storage::putFileAs(
+                //     'public/images/item_photos', $file, $photo_name
+                // );
+                // $path = str_replace('public/','',$path); // aneh sih, path nya yang public mesti diilangin dulu, baru nanti bisa dipanggil pake asset
+                $path=$file->storeAs('public/images/item-photos',$photo_name);
+                // $path = $file->storePubliclyAs(
+                //     'images/item-photos',
+                //     $photo_name,
+                //     's3'
+                // );
+                ItemPhoto::create([
+                    'item_id'=>$new_item->id,
+                    'path'=>$path
+                ]);
+            }
+            $success_.=' Photo diupload!';
+        }
         $feedback=[
             'success_'=>$success_,
 
         ];
+
         return redirect()->route('items.index')->with($feedback);
     }
 
@@ -196,7 +229,7 @@ class ItemController extends Controller
      */
     public function show(Item $item)
     {
-        dd($item);
+        dd('show',$item);
     }
 
     /**
@@ -230,6 +263,22 @@ class ItemController extends Controller
      */
     public function destroy(Item $item)
     {
-        //
+        // dd('destroy', $item);
+        $item_photos=ItemPhoto::where('item_id',$item->id)->get();
+        $danger_='';
+        if (count($item_photos)!==0) {
+            // dump('Ada Foto yang perlu dihapus!');
+            foreach ($item_photos as $item_photo) {
+                Storage::delete($item_photo->path);
+                // dump('Foto dihapus!');
+            }
+            $danger_.='Foto item dihapus!';
+        }
+        $item->delete();
+        $danger_.=' Data item berhasil dihapus!';
+        $feedback=[
+            'danger_'=>$danger_,
+        ];
+        return back()->with($feedback);
     }
 }

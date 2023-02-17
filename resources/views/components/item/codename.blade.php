@@ -349,7 +349,7 @@
             gol_kadar_value = 'TUA';
         }
         gol_kadar.value=gol_kadar_value;
-        console.log(gol_kadar.value);
+        // console.log(gol_kadar.value);
 
         // 11 - Berat
         let n_berat;

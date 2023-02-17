@@ -48,9 +48,15 @@
                         <label for="" class="block">Range Usia:</label>
                         <select id="range_usia" class="input" onchange="generateNama()" name="range_usia">
                             <option value="">-</option>
+                            @if (old('range_usia'))
                             @foreach ($rangeusias as $range_usia)
                             <option value="{{ $range_usia['nama'] }}" {{ old('range_usia') === $range_usia['nama'] ? 'selected' : '' }}>{{ $range_usia['nama'] }}</option>
                             @endforeach
+                            @else
+                            @foreach ($rangeusias as $range_usia)
+                            <option value="{{ $range_usia['nama'] }}" {{ $range_usia['nama'] === 'dewasa' ? 'selected' : '' }}>{{ $range_usia['nama'] }}</option>
+                            @endforeach
+                            @endif
                         </select>
                     </div>
                 </div>
@@ -122,8 +128,17 @@
             </div>
             <div class="flex mt-1">
                 <div>
-                    <label for="">Keterangan(opt.):</label>
-                    <input type="text" class="input" placeholder="Keterangan(opt.)" />
+                    <label for="">Ket.(opt.):</label>
+                    <input type="text" class="input w-11/12" placeholder="Keterangan(opt.)" />
+                </div>
+                <div>
+                    <label for="merek">Merek(opt.):</label>
+                    <select name="merek" id="merek" class="input">
+                        <option value="">--</option>
+                        @foreach ($mereks as $merek)
+                        <option value="{{ $merek->nama }}">{{ $merek->nama }}</option>
+                        @endforeach
+                    </select>
                 </div>
                 <div>
                     <div>
