@@ -16,8 +16,8 @@ class UserSeeder extends Seeder
     public function run()
     {
         $users = [
-            ["nama"=>"Adi Kurniawan","username"=>"kuruniawa","password"=>"ddloveakunsomuch","is_admin"=>true],
-            ["nama"=>"Guest","username"=>"guest","password"=>"guest","is_admin"=>false],
+            ["nama"=>"Adi Kurniawan","username"=>"kuruniawa","password"=>"ddloveakunsomuch","role"=>'developer'],
+            ["nama"=>"Guest","username"=>"guest","password"=>"guest","role"=>'guest'],
         ];
         for ($i = 0; $i < count($users); $i++) {
             // dump('seeding user');
@@ -29,7 +29,7 @@ class UserSeeder extends Seeder
                 'nama' => $users[$i]['nama'],
                 'username' => $users[$i]['username'],
                 'password' => $password,
-                'is_admin' => $users[$i]['is_admin'],
+                'role' => $users[$i]['role'],
             ]);
         }
     }

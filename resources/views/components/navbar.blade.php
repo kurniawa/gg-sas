@@ -1,9 +1,19 @@
 <div>
     <!-- Knowing is not enough; we must apply. Being willing is not enough; we must do. - Leonardo da Vinci -->
-    <nav class="h-11 bg-violet-500 text-white flex justify-between pl-5" x-data="{show_dd:false}">
-        <a href="/" class="text-white h-11 flex items-center"
-            ><span class="font-semibold text-xl">Gol D. Jewel</span></a
-        >
+    <nav class="h-11 bg-violet-500 text-white flex justify-between pl-3" x-data="{show_dd:false}">
+        <div class="flex items-center">
+            @if ($goback!=='')
+            <a href="{{ route($goback) }}" class="text-white font-bold bg-orange-500 rounded p-1">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="6" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                </svg>
+            </a>
+            @endif
+            <a href="/" class="text-white h-11 flex items-center ml-3"
+                ><span class="font-semibold text-xl">Gol D. Jewel</span></a
+            >
+
+        </div>
         <div class="relative"
         {{-- x-on:click="show_dd=!show_dd"  --}}
         @mouseover="show_dd=true" @mouseleave="show_dd=false">

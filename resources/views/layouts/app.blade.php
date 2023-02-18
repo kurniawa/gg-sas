@@ -30,7 +30,9 @@
 
 <body>
     <img style='position:fixed;width:5rem;top:20%;left:50%;transform:translate(-50%,-50%);' id='loading-progress-icon' src='{{ asset('img/gear_loading-violet.gif') }}' alt=''>
-    @yield('content')
+    {{-- @yield('content') --}}
+    {{ $slot }}
+    <x-user-status></x-user-status>
     @livewireScripts
 </body>
 

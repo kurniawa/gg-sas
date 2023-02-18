@@ -1,10 +1,11 @@
 @extends('layouts.main_layout')
 @section('title','GL.SAS')
-<x-navbar></x-navbar>
+<x-navbar :goback="$goback"></x-navbar>
+<x-feedback></x-feedback>
 @auth
 <div class="grid grid-cols-3 gap-2 mx-5 mt-5">
     <a
-        href="{{ route('items.index') }}"
+        href="{{ route('pembelians.index') }}"
         class="bg-indigo-400 shadow drop-shadow rounded hover:bg-emerald-500"
     >
         <div class="flex items-center h-3/4 justify-center">

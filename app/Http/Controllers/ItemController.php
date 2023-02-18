@@ -26,9 +26,11 @@ class ItemController extends Controller
             $item_photos=ItemPhoto::where('item_id',$item->id)->get();
             $arr_item_photos[]=$item_photos;
         }
+        $goback='home';
         $data=[
             'items'=>$items,
-            'arr_item_photos'=>$arr_item_photos
+            'arr_item_photos'=>$arr_item_photos,
+            'goback'=>$goback,
         ];
         // dd($data);
         return view('item.items',$data);
@@ -72,6 +74,7 @@ class ItemController extends Controller
         // dd($tipeperhiasans);
         // dd($gelangrantais);
         $data = [
+            'goback'=>'items.index',
             'specs'=>$specs,
             'tipe_barangs'=>$tipe_barangs,
             'antings'=>$antings,
@@ -192,15 +195,16 @@ class ItemController extends Controller
 
         // UPLOAD PHOTO - IF EXIST
         $files = $request->file('item_photo');
+        // dd($files);
         // dd($files[1]);
-        if (count($files)!==0) {
+        if ($files!==null) {
             foreach ($files as $file) {
                 $photo_name="PP-". uniqid() . "." . $file->getClientOriginalExtension();
                 // $path = Storage::putFileAs(
                 //     'public/images/item_photos', $file, $photo_name
                 // );
-                // $path = str_replace('public/','',$path); // aneh sih, path nya yang public mesti diilangin dulu, baru nanti bisa dipanggil pake asset
                 $path=$file->storeAs('public/images/item-photos',$photo_name);
+                $path = str_replace('public/','',$path); // aneh sih, path nya yang public mesti diilangin dulu, baru nanti bisa dipanggil pake asset
                 // $path = $file->storePubliclyAs(
                 //     'images/item-photos',
                 //     $photo_name,
@@ -269,7 +273,7 @@ class ItemController extends Controller
         if (count($item_photos)!==0) {
             // dump('Ada Foto yang perlu dihapus!');
             foreach ($item_photos as $item_photo) {
-                Storage::delete($item_photo->path);
+                Storage::delete('public/' . $item_photo->path);
                 // dump('Foto dihapus!');
             }
             $danger_.='Foto item dihapus!';

@@ -14,7 +14,7 @@ class LoginController extends Controller
      */
     public function index()
     {
-        return view('login.login');
+        return view('login.login',['goback'=>'home']);
     }
 
     public function authenticate(Request $request)
@@ -44,6 +44,12 @@ class LoginController extends Controller
         $request->session()->regenerateToken();
 
         return redirect('/');
+    }
+
+    public function home()
+    {
+        // dd('goback');
+        return view('app',['goback'=>'']);
     }
 
     /**

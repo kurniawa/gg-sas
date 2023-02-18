@@ -1,5 +1,5 @@
 @extends('layouts.main_layout')
-<x-navbar></x-navbar>
+<x-navbar :goback="$goback"></x-navbar>
 @section('content')
 <div class="m-3">
     <div class="inline-block rounded p-2 bg-white shadow drop-shadow">

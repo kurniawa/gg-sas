@@ -3,26 +3,26 @@
 <x-navbar :goback="$goback"></x-navbar>
 <div class="flex items-center justify-between mt-2 px-2">
     <div>
-        <h3>Stok Items</h3>
+        <h3>Pembelian</h3>
     </div>
     <div>
-        <a href="{{ route('items.create') }}" class="btn-emerald rounded">+Tambah Stok</a>
+        <a href="{{ route('carts.create') }}" class="btn-emerald rounded">+Cart</a>
     </div>
 </div>
 <x-feedback></x-feedback>
 <div class="m-1">
     <table class="table-nice">
-        @foreach ($items as $key=>$item)
+        @foreach ($pembelians as $key=>$pembelian)
         <tr>
             <td>
-                @if (count($arr_item_photos[$key])!==0)
+                @if (count($arr_pembelian_photos[$key])!==0)
                 <div class="w-7 h-7">
-                    <img src="{{ asset('storage/'. $arr_item_photos[$key][0]->path) }}" alt="" class="w-full">
+                    <img src="{{ asset('storage/'. $arr_pembelian_photos[$key][0]->path) }}" alt="" class="w-full">
                 </div>
                 @endif
             </td>
-            <td>{{ $item->nama }}</td>
-            <td>{{ $item->stok }}</td>
+            <td>{{ $pembelian->nama }}</td>
+            <td>{{ $pembelian->stok }}</td>
             <td>
                 {{-- <div class="flex">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
@@ -33,9 +33,9 @@
                         <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0M3.124 7.5A8.969 8.969 0 015.292 3m13.416 0a8.969 8.969 0 012.168 4.5" />
                     </svg>
                 </div> --}}
-                <div class="flex items-center">
-                    <a href="{{ route('items.show', $item->id) }}" class="btn-warning rounded p-2">></a>
-                    <form method="POST" action="{{ route('items.destroy', $item->id) }}" class="m-0" onsubmit="return confirm('Anda yakin ingin menghapus item ini?')">
+                <div class="flex pembelians-center">
+                    <a href="{{ route('pembelians.show', $pembelian->id) }}" class="btn-warning rounded p-2">></a>
+                    <form method="POST" action="{{ route('pembelians.destroy', $pembelian->id) }}" class="m-0" onsubmit="return confirm('Anda yakin ingin menghapus pembelian ini?')">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn-danger text-white rounded p-1 ml-1">

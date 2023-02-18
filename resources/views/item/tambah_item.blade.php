@@ -1,6 +1,6 @@
 @extends('layouts.main_layout')
 @section('title','GL.SAS')
-<x-navbar></x-navbar>
+<x-navbar :goback="$goback"></x-navbar>
 <div class="p-2">
     <h3>+Tambah Item</h3>
 </div>
