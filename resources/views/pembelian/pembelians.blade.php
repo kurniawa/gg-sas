@@ -1,54 +1,308 @@
 @extends('layouts.main_layout')
 @section('title','GL.SAS')
 <x-navbar :goback="$goback"></x-navbar>
-<div class="flex items-center justify-between mt-2 px-2">
-    <div>
-        <h3>Pembelian</h3>
-    </div>
-    <div>
-        <a href="{{ route('carts.create') }}" class="btn-emerald rounded">+Cart</a>
-    </div>
+<div class="p-2">
+    <h3>+ Cart</h3>
 </div>
-<x-feedback></x-feedback>
-<div class="m-1">
-    <table class="table-nice">
-        @foreach ($pembelians as $key=>$pembelian)
-        <tr>
-            <td>
-                @if (count($arr_pembelian_photos[$key])!==0)
-                <div class="w-7 h-7">
-                    <img src="{{ asset('storage/'. $arr_pembelian_photos[$key][0]->path) }}" alt="" class="w-full">
+<form method="post" action="{{ route('items.store') }}" class="m-2" enctype="multipart/form-data"
+    x-data="{
+        item:{
+            tipe_barang:'Perhiasan',
+        }
+    }"
+    >
+    @csrf
+    <div class="flex">
+        <select id="tipe_barang" class="input" x-model="item.tipe_barang" name="tipe_barang" value="{{ old('tipe_barang') }}">
+            <option value="">-</option>
+            @foreach ($tipe_barangs as $tipe_barang)
+            <option value="{{ $tipe_barang['tipe'] }}">{{ $tipe_barang['tipe'] }}</option>
+            @endforeach
+        </select>
+        <template x-if="item.tipe_barang==='Perhiasan'">
+            <div class="ml-1 flex">
+                <div>
+                    <select
+                        id="tipe_perhiasan"
+                        name="tipe_perhiasan"
+                        onchange="setOpsiJenisPerhiasan(this.value)"
+                        class="input"
+                    >
+                        <option value="">-</option>
+                        @foreach ($kodetipeperhiasans as $kode_tipe_perhiasan)
+                            <option value="{{ $kode_tipe_perhiasan }}" {{ old('tipe_perhiasan') === $kode_tipe_perhiasan ? 'selected' : '' }}>{{ $kode_tipe_perhiasan }}</option>
+                        @endforeach
+                    </select>
                 </div>
-                @endif
-            </td>
-            <td>{{ $pembelian->nama }}</td>
-            <td>{{ $pembelian->stok }}</td>
-            <td>
-                {{-- <div class="flex">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0M3.124 7.5A8.969 8.969 0 015.292 3m13.416 0a8.969 8.969 0 012.168 4.5" />
-                    </svg>
-                </div> --}}
-                <div class="flex pembelians-center">
-                    <a href="{{ route('pembelians.show', $pembelian->id) }}" class="btn-warning rounded p-2">></a>
-                    <form method="POST" action="{{ route('pembelians.destroy', $pembelian->id) }}" class="m-0" onsubmit="return confirm('Anda yakin ingin menghapus pembelian ini?')">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn-danger text-white rounded p-1 ml-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
-                            </svg>
-                        </button>
-                    </form>
+                <div class="ml-1">
+                    <input id="jenis_perhiasan" class="input w-full" type="text" name="jenis_perhiasan" placeholder="Jenis Perhiasan..." value="{{ old('jenis_perhiasan') }}"/>
                 </div>
-            </td>
-        </tr>
-        @endforeach
-    </table>
-</div>
+            </div>
+        </template>
+    </div>
+    <template x-if="item.tipe_barang==='Perhiasan'">
+        <div>
+            <div class="flex mt-1 items-center">
+                <div>
+                    <div>
+                        <label for="" class="block">Range Usia:</label>
+                        <select id="range_usia" class="input" onchange="generateNama()" name="range_usia">
+                            <option value="">-</option>
+                            @if (old('range_usia'))
+                            @foreach ($rangeusias as $range_usia)
+                            <option value="{{ $range_usia['nama'] }}" {{ old('range_usia') === $range_usia['nama'] ? 'selected' : '' }}>{{ $range_usia['nama'] }}</option>
+                            @endforeach
+                            @else
+                            @foreach ($rangeusias as $range_usia)
+                            <option value="{{ $range_usia['nama'] }}" {{ $range_usia['nama'] === 'dewasa' ? 'selected' : '' }}>{{ $range_usia['nama'] }}</option>
+                            @endforeach
+                            @endif
+                        </select>
+                    </div>
+                </div>
+                <div class="ml-1">
+                    <div>
+                        <label for="" class="block">Warna Emas:</label>
+                        <select id="warna_emas" class="input" onchange="generateNama()" name="warna_emas">
+                            <option value="">-</option>
+                            @foreach ($warnaemass as $warna_emas)
+                            <option value="{{ $warna_emas['nama'] }}" {{ old('warna_emas') === $warna_emas['nama'] ? 'selected' : '' }}>{{ $warna_emas['nama'] }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="ml-1">
+                    <div>
+                        <label for="" class="block">Nampan:</label>
+                        <select id="nampan" class="input" onchange="generateNama()" name="nampan">
+                            @foreach ($nampans as $nampan)
+                            <option value="{{ $nampan['codename'] }}" {{ old('nampan') === $nampan['codename'] ? 'selected' : '' }}>{{ $nampan['codename'] }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <x-item.mata :matas="$matas"></x-item.mata>
+
+            <x-item.mainan :mainans="$mainans"></x-item.mainan>
+
+            <div class="flex">
+                <x-item.plat></x-item.plat>
+                <x-item.ukuran></x-item.ukuran>
+            </div>
+            <div class="flex mt-1 items-center">
+                <div>
+                    <div>
+                        <label for="" class="block">Kadar(%):</label>
+                        <select name="kadar" id="kadar" class="input" onchange="generateNama()">
+                            @foreach ($kadars as $kadar)
+                            <option value="{{ $kadar->nama }}">{{ $kadar->nama }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="ml-1">
+                    <div>
+                        <label for="" class="block">Berat(g):</label>
+                        <input
+                            id="berat" name="berat"
+                            type="number"
+                            class="input w-11/12"
+                            placeholder="Berat"
+                            onkeyup="generateNama()"
+                            value="{{ old('berat') }}"
+                            step="any"
+                        />
+                    </div>
+                </div>
+                <x-item.cap :caps="$caps"></x-item.cap>
+                <div class="ml-1">
+                    <label for="" class="block">Kondisi:</label>
+                    <select name="kondisi" id="kondisi" class="input" onchange="generateNama()">
+                        <option value="">-</option>
+                        @foreach ($kondisis as $kondisi)
+                        <option value="{{ $kondisi->nama }}" {{ old('kondisi') === $kondisi['nama'] ? 'selected' : '' }}>{{ $kondisi->nama }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="flex mt-1">
+                <div>
+                    <label for="">Ket.(opt.):</label>
+                    <input type="text" class="input w-11/12" placeholder="Keterangan(opt.)" />
+                </div>
+                <div>
+                    <label for="merek">Merek(opt.):</label>
+                    <select name="merek" id="merek" class="input">
+                        <option value="">--</option>
+                        @foreach ($mereks as $merek)
+                        <option value="{{ $merek->nama }}">{{ $merek->nama }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div>
+                    <div>
+                        <label for="" class="block">Stok:</label>
+                        <input type="number" class="input w-11/12" name="stok" placeholder="Stok" step="1" value="{{ old('stok') }}"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+    <input type="hidden" name="gol_kadar" id="gol_kadar">
+    {{-- <x-item.photos></x-item.photos> --}}
+    @error('tipe_barang')
+    <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
+    @error('tipe_perhiasan')
+    <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
+    @error('jenis_perhiasan')
+    <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
+    @error('range_usia')
+    <div class="text-pink-600">{{ $message }}</div>
+    @enderror
+    @error('warna_emas')
+    <div class="text-pink-600">{{ $message }}</div>
+    @enderror
+    @error('warna_mata')
+    <div class="text-pink-600">{{ $message }}</div>
+    @enderror
+    @error('jumlah_mata')
+    <div class="text-pink-600">{{ $message }}</div>
+    @enderror
+    @error('mainan')
+    <div class="text-pink-600">{{ $message }}</div>
+    @enderror
+    @error('jumlah_mainan')
+    <div class="text-pink-600">{{ $message }}</div>
+    @enderror
+    @error('nampan')
+    <div class="text-pink-600">{{ $message }}</div>
+    @enderror
+    @error('plat')
+    <div class="text-pink-600">{{ $message }}</div>
+    @enderror
+    @error('ukuran')
+    <div class="text-pink-600">{{ $message }}</div>
+    @enderror
+    @error('kadar')
+    <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
+    @error('berat')
+    <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
+    @error('cap')
+    <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
+    @error('kondisi')
+    <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
+    @error('stok')
+    <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
+    @error('merek')
+    <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
+    @error('nama')
+    <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
+    @error('specs')
+    <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
+    @error('kode_item')
+    <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
+    @error('keterangan')
+    <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
+    <div class="mt-2">
+        <button type="submit" class="bg-violet-500 py-4 rounded w-full text-center text-white font-bold">
+            +Tambah ke Stock
+        </button>
+    </div>
+    <x-item.codename :antings="$antings" :giwangs="$giwangs" :cincins="$cincins" :kalungs="$kalungs" :gelangrantais="$gelangrantais"
+    :gelangbulats="$gelangbulats" :liontins="$liontins" :tipeperhiasans="$tipeperhiasans" :kodetipeperhiasans="$kodetipeperhiasans"
+    :nomortipeperhiasans="$nomortipeperhiasans" :jenisperhiasans="$jenisperhiasans"></x-item.codename>
+
+    <button type="button" class="btn-warning" onclick="generateNama()">generateNama()</button>
+
+</form>
 
 <x-user-status></x-user-status>
+
+<script>
+    const specs = {!! json_encode($specs, JSON_HEX_TAG) !!};
+    // console.log(specs);
+    let jenis_perhiasan=[];
+    // Data Mata
+    const matas = {!! json_encode($matas,JSON_HEX_TAG) !!}
+    // matas = matas.filter(function(){return true;});
+    let label_matas=[];
+    matas.forEach(mata => {
+        label_matas.push({label:mata.nama,value:mata.nama,id:mata.id});
+    });
+    // console.log(matas);
+    // console.log(matas.length);
+    // console.log(label_matas);
+    let count_child_mata=0;
+    let dataMata=[];
+    // Data Mainan
+    const mainans = {!! json_encode($mainans,JSON_HEX_TAG) !!}
+    // mainans = mainans.filter(function(){return true;});
+    let label_mainans=[];
+    mainans.forEach(mainan => {
+        label_mainans.push({label:mainan.nama,value:mainan.nama,id:mainan.id});
+    });
+    // console.log(mainans);
+    // console.log(mainans.length);
+    // console.log(label_mainans);
+    let count_child_mainan=0;
+    let data_mainan=[];
+    // Data Plat
+    let plat_before=0;
+    let input_plat;
+    // Data Ukuran
+    let ukuran_before=0;
+    let input_ukuran;
+    // Data Cap
+    const caps = {!! json_encode($caps, JSON_HEX_TAG) !!};
+    let label_caps=[];
+    caps.forEach(element => {
+        label_caps.push({label:element.nama,value:element.nama,id:element.id});
+    });
+    // SET VARIABLE - JEDA BEBERAPA SAAT
+    setTimeout(() => {
+        input_plat = document.getElementById('input_plat');
+        input_ukuran = document.getElementById('input_ukuran')
+    }, 1000);
+
+    function setOpsiJenisPerhiasan(kode_tipe) {
+        // console.log(kode_tipe);
+        let results;
+        if (kode_tipe!=='') {
+            results=specs.filter(spec=>spec.kategori==='tipe_perhiasan'&&spec.kode_tipe===kode_tipe);
+        }
+        results.forEach(res => {
+            jenis_perhiasan.push({
+                label:res.nama,
+                value:res.nama,
+                id:res.id
+            });
+        });
+        // console.log('jenis_perhiasan',jenis_perhiasan);
+        setAutocompleteJenisPerhiasan();
+    }
+
+    function setAutocompleteJenisPerhiasan() {
+        $("#jenis_perhiasan").autocomplete({
+            source: jenis_perhiasan,
+            select: function(event, ui) {
+                // console.log(ui.item);
+                document.getElementById('jenis_perhiasan').value = ui.item.value;
+            }
+        });
+
+    }
+</script>

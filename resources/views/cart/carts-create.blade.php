@@ -3,7 +3,7 @@
 {{-- <navbar :goback="$goback"></navbar> --}}
 @section('content')
 <div class="p-2">
-    <h3>+Tambah Item</h3>
+    <h3>+Cart</h3>
 </div>
 <form method="post" action="{{ route('items.store') }}" class="m-2" enctype="multipart/form-data"
     x-data="{
@@ -298,70 +298,19 @@
                         @endforeach
                     </select>
                 </div>
-                <div>
+                {{-- <div>
                     <div>
                         <label for="" class="block">Stok:</label>
                         <input type="number" class="input w-11/12" name="stok" placeholder="Stok" step="1" value="{{ old('stok') }}"/>
                     </div>
-                </div>
+                </div> --}}
             </div>
         </div>
     </template>
     <input type="hidden" name="gol_kadar" id="gol_kadar">
-
-    {{-- ELEMENT - PHOTOS --}}
-    <div class="mt-2">
-        <div id="div_item_photos">
+    <div class="flex justify-center mt-1">
+        <div id="div_item_photos" class="w-1/2">
             {{-- <item.photos></item.photos> --}}
-            <div class="flex">
-                @for ($i = 0; $i < 3; $i++)
-                    {{-- <div class="w-24 h-24{class_preview[i]}">
-                        <img src="" alt="avatar_foto" />
-                    </div> --}}
-                    {{-- {:else} --}}
-                    @if ($i!==0)
-                    <div class="ml-2">
-                    @else
-                    <div>
-                    @endif
-                        <div id="container-preview-photo-{{ $i }}" class="hidden">
-                            <label for="input-photo-{{ $i }}">
-                                <div class="w-24 h-24">
-                                    <img id="preview-photo-{{ $i }}" src="" alt="" class="w-full">
-                                </div>
-                            </label>
-                            <button type="button" class="btn-danger rounded flex justify-center text-white mt-1 w-full" onclick="remove_photo('input-photo-{{ $i }}','container-preview-photo-{{ $i }}','preview-photo-{{ $i }}','label-choose-photo-{{ $i }}')">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
-                                </svg>
-                            </button>
-                        </div>
-                        <label id="label-choose-photo-{{ $i }}" for="input-photo-{{ $i }}" class="border-8 border-dashed rounded w-24 h-24 flex items-center justify-center">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke-width="1.5"
-                                stroke="currentColor"
-                                class="w-16 h-16 text-slate-300"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z"
-                                />
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z"
-                                />
-                            </svg>
-                        </label>
-
-                    </div>
-                    <input id="input-photo-{{ $i }}" name="item_photo[]" type="file" accept=".jpg, .jpeg, .png" style="display:none" onchange="preview_photo(this.id,'container-preview-photo-{{ $i }}','preview-photo-{{ $i }}','label-choose-photo-{{ $i }}')"/>
-                @endfor
-            </div>
         </div>
     </div>
     @error('tipe_barang')
@@ -432,10 +381,16 @@
     @enderror
     <div id="feedback_verifikasi" class="mt-1 hidden"></div>
     <div class="mt-2">
-        <button type="submit" class="bg-violet-500 py-4 rounded w-full text-center text-white font-bold">
-            +Tambah ke Stock
+        <button type="button" class="bg-emerald-500 py-4 rounded w-full text-center text-white font-bold flex items-center justify-center" onclick="cariItem()">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+            </svg>
+            <span>
+                Cari & Verifikasi
+            </span>
         </button>
     </div>
+    <div id="div_btn_submit" class="mt-2"></div>
     {{-- ELEMENT - CODENAME --}}
     {{-- <item.codename :antings="$antings" :giwangs="$giwangs" :cincins="$cincins" :kalungs="$kalungs" :gelangrantais="$gelangrantais"
     :gelangbulats="$gelangbulats" :liontins="$liontins" :tipeperhiasans="$tipeperhiasans" :kodetipeperhiasans="$kodetipeperhiasans"
@@ -751,31 +706,6 @@
 
     function select_cap(value) {
         document.getElementById('input-cap').value=value;
-    }
-
-    // FUNGSI - PHOTO
-    function preview_photo(input_id,container_preview_photo_id,preview_photo_id,label_choose_photo_id) {
-        const el_input = document.getElementById(input_id);
-        const el_container_preview_photo = document.getElementById(container_preview_photo_id);
-        const el_preview_photo = document.getElementById(preview_photo_id);
-        const el_label_choose_photo = document.getElementById(label_choose_photo_id);
-        // console.log(el_input.files[0]);
-        const blob = URL.createObjectURL(el_input.files[0]);
-        el_preview_photo.src=blob;
-        el_container_preview_photo.classList.remove('hidden');
-        el_label_choose_photo.classList.add('hidden');
-    }
-
-    function remove_photo(input_id,container_preview_photo_id,preview_photo_id,label_choose_photo_id) {
-        const el_input = document.getElementById(input_id);
-        const el_container_preview_photo = document.getElementById(container_preview_photo_id);
-        const el_preview_photo = document.getElementById(preview_photo_id);
-        const el_label_choose_photo = document.getElementById(label_choose_photo_id);
-        el_input.value=null;
-        el_preview_photo.src=null;
-        console.log(el_container_preview_photo);
-        el_container_preview_photo.classList.add('hidden');
-        el_label_choose_photo.classList.remove('hidden');
     }
 
     // FUNGSI - CODENAME
@@ -1189,6 +1119,70 @@
         td_kode_item.textContent=codename_item;
 
     }
+
+    // FUNGSI UNTUK PENCARIAN ITEM - IS ITEM EXIST
+
+    const items = {!! json_encode($items,JSON_HEX_TAG) !!};
+    const item_photos = {!! json_encode($item_photos, JSON_HEX_TAG) !!};
+    // console.log(item_photos);
+    function cariItem() {
+        const kode_item = document.getElementById('kode_item').value;
+        const div_feedback_verifikasi = document.getElementById('feedback_verifikasi');
+        console.log(kode_item);
+        let passed = false;
+        if (kode_item==='' || kode_item.includes('400')) {
+            div_feedback_verifikasi.classList.remove('hidden');
+            div_feedback_verifikasi.classList.add('alert-danger');
+            div_feedback_verifikasi.textContent = 'ERR: Kode Item!';
+        } else {
+            passed = true;
+        }
+        // console.log(passed);
+        // console.log(kode_item);
+        const div_btn_submit = document.getElementById('div_btn_submit');
+        let found_items = [];
+        let found_photos = [];
+        let itemExist = false;
+        if (passed) {
+            found_items=items.filter((item)=>item.kode_item.indexOf(kode_item) > -1);
+            // console.log(found_items);
+            if (found_items.length !== 0) {
+                div_feedback_verifikasi.classList.remove('hidden');
+                div_feedback_verifikasi.classList.remove('alert-danger');
+                div_feedback_verifikasi.classList.remove('alert-success');
+                div_feedback_verifikasi.classList.add('alert-warning');
+                div_feedback_verifikasi.textContent = 'WARN: Item sudah ada!';
+                itemExist = true;
+            } else {
+                div_feedback_verifikasi.classList.remove('hidden');
+                div_feedback_verifikasi.classList.remove('alert-danger');
+                div_feedback_verifikasi.classList.remove('alert-warning');
+                div_feedback_verifikasi.classList.add('alert-success');
+                div_feedback_verifikasi.textContent = 'SUCC: Item belum ada!';
+            }
+        }
+
+
+        if (itemExist) {
+            console.log(found_items[0].id);
+            const div_item_photos = document.getElementById('div_item_photos');
+            found_photos = item_photos.filter((el)=>el.item_id.toString().indexOf(found_items[0].id.toString()) > -1);
+            let img_photos = '';
+            found_photos.forEach(element => {
+                img_photos += `<img src="${window.location.origin}/storage/${element.path}" class="border-4 border-slate-300 rounded shadow box-shadow">`;
+            });
+            div_item_photos.innerHTML=img_photos;
+            // console.log(found_photos);
+        }
+
+        if (passed) {
+            const div_btn_submit = document.getElementById('div_btn_submit');
+            div_btn_submit.innerHTML = `
+            <button type="submit" class="bg-violet-500 py-4 rounded w-full text-center text-white font-bold">
+                +Tambah ke Stock
+            </button>
+            `;
+        }
+    }
 </script>
 @endsection
-

@@ -1,6 +1,7 @@
 @extends('layouts.main_layout')
 @section('title','GL.SAS')
-<x-navbar :goback="$goback"></x-navbar>
+{{-- <navbar :goback="$goback"></navbar> --}}
+@section('content')
 <div class="flex items-center justify-between mt-2 px-2">
     <div>
         <h3>Stok Items</h3>
@@ -9,7 +10,26 @@
         <a href="{{ route('items.create') }}" class="btn-emerald rounded">+Tambah Stok</a>
     </div>
 </div>
-<x-feedback></x-feedback>
+{{-- <feedback></feedback> --}}
+<div class="m-2">
+    <!-- The only way to do great work is to love what you do. - Steve Jobs -->
+    @if (session()->has('success_') && session('success_')!=="")
+    <div class="alert-success rounded">{{ session('success_') }}</div>
+    @endif
+    @if (session()->has('warning_') && session('warning_')!=="")
+    <div class="alert-warning rounded">{{ session('warning_') }}</div>
+    @endif
+    @if (session()->has('danger_') && session('danger_')!=="")
+    <div class="alert-danger rounded">{{ session('danger_') }}</div>
+    @endif
+    @if (session()->has('failed_') && session('failed_')!=="")
+    <div class="alert-danger rounded">{{ session('failed_') }}</div>
+    @endif
+    @if (session()->has('error_') && session('error_')!=="")
+    <div class="alert-danger rounded">{{ session('error_') }}</div>
+    @endif
+</div>
+
 <div class="m-1">
     <table class="table-nice">
         @foreach ($items as $key=>$item)
@@ -50,5 +70,6 @@
         @endforeach
     </table>
 </div>
+@endsection
 
-<x-user-status></x-user-status>
+{{-- <user-status></user-status> --}}

@@ -1,11 +1,25 @@
 @extends('layouts.main_layout')
 @section('title','GL.SAS')
-<x-navbar :goback="$goback"></x-navbar>
-<x-feedback></x-feedback>
+{{-- <navbar :goback="$goback"></navbar> --}}
+{{-- <feedback></feedback> --}}
+    <!-- The only way to do great work is to love what you do. - Steve Jobs -->
+@section('content')
+<div class="m-2">
+    @if (session()->has('success_') && session('success_')!=="")
+    <div class="alert-success rounded">{{ session('success_') }}</div>
+    @endif
+    @if (session()->has('warning_') && session('warning_')!=="")
+    <div class="alert-warning rounded">{{ session('warning_') }}</div>
+    @endif
+    @if (session()->has('danger_') && session('danger_')!=="")
+    <div class="alert-danger rounded">{{ session('danger_') }}</div>
+    @endif
+</div>
+
 @auth
 <div class="grid grid-cols-3 gap-2 mx-5 mt-5">
     <a
-        href="{{ route('pembelians.index') }}"
+        href="{{ route('carts.create') }}"
         class="bg-indigo-400 shadow drop-shadow rounded hover:bg-emerald-500"
     >
         <div class="flex items-center h-3/4 justify-center">
@@ -62,15 +76,5 @@
     </a>
 </div>
 @endauth
-<div class="mx-8 rounded border mt-5 text-center p-3">
-    @auth
+@endsection
 
-    <p>User logged in!</p>
-    <p>Username: {{ Auth::user()->username }}</p>
-
-    @endauth
-    @guest
-    <p>User is not logged in!</p>
-
-    @endguest
-</div>

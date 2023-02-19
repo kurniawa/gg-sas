@@ -206,7 +206,7 @@ class SpecSeeder extends Seeder
             [ 'kategori'=>'cap','tipe'=>null,'kode_tipe'=>null,'nomor_tipe'=>null,'nama'=>'gBintangBulan', 'name_id'=> 21, 'codename'=> 'c.gBinBul' ],
             [ 'kategori'=>'cap','tipe'=>null,'kode_tipe'=>null,'nomor_tipe'=>null,'nama'=>'gRoaster', 'name_id'=> 22, 'codename'=> 'c.gRoaster' ],
             [ 'kategori'=>'cap','tipe'=>null,'kode_tipe'=>null,'nomor_tipe'=>null,'nama'=>'gSBintang', 'name_id'=> 23, 'codename'=> 'c.gSBin' ],
-            [ 'kategori'=>'kondisi','tipe'=>null,'kode_tipe'=>null,'nomor_tipe'=>null,'nama'=> 'MULUS', 'name_id'=> 99, 'codename'=> 'MULUS' ],
+            [ 'kategori'=>'kondisi','tipe'=>null,'kode_tipe'=>null,'nomor_tipe'=>null,'nama'=> '99', 'name_id'=> 99, 'codename'=> 'k.99' ],
             [ 'kategori'=>'kondisi','tipe'=>null,'kode_tipe'=>null,'nomor_tipe'=>null,'nama'=> '9', 'name_id'=> 9, 'codename'=> 'k.9' ],
             [ 'kategori'=>'kondisi','tipe'=>null,'kode_tipe'=>null,'nomor_tipe'=>null,'nama'=> '8', 'name_id'=> 8, 'codename'=> 'k.8' ],
             [ 'kategori'=>'kondisi','tipe'=>null,'kode_tipe'=>null,'nomor_tipe'=>null,'nama'=> '7', 'name_id'=> 7, 'codename'=> 'k.7' ],

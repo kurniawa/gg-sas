@@ -1,6 +1,6 @@
 @extends('layouts.main_layout')
 @section('title','GL.SAS')
-<x-navbar :goback="$goback"></x-navbar>
+{{-- <navbar :goback="$goback"></navbar> --}}
 @section('content')
 <form action="{{ route('login') }}" method="POST" class="p-5 border rounded border-slate-300 mx-5 mt-11">
     @csrf
