@@ -18,6 +18,7 @@ class UserSeeder extends Seeder
         $users = [
             ["nama"=>"Adi Kurniawan","username"=>"kuruniawa","password"=>"ddloveakunsomuch","role"=>'developer'],
             ["nama"=>"Guest","username"=>"guest","password"=>"guest","role"=>'guest'],
+            ["nama"=>"Dummy","username"=>"dummy","password"=>"dummy","role"=>'customer'],
         ];
         for ($i = 0; $i < count($users); $i++) {
             // dump('seeding user');

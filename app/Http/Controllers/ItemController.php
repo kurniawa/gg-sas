@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
 use App\Models\Item;
 use App\Models\ItemPhoto;
 use App\Models\ItemSpec;
@@ -27,9 +28,11 @@ class ItemController extends Controller
             $arr_item_photos[]=$item_photos;
         }
         $goback='home';
+        // $carts = Cart::getCartItemsCorrespondingUser();
         $data=[
             'items'=>$items,
             'arr_item_photos'=>$arr_item_photos,
+            'carts'=>Cart::all(),
             'goback'=>$goback,
         ];
         // dd($data);

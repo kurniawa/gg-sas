@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -49,7 +50,7 @@ class LoginController extends Controller
     public function home()
     {
         // dd('goback');
-        return view('app',['goback'=>'']);
+        return view('app',['goback'=>'','carts_data'=>Cart::getCartsItemPerUser()]);
     }
 
     /**

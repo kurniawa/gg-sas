@@ -309,6 +309,24 @@
     </template>
     <input type="hidden" name="gol_kadar" id="gol_kadar">
 
+    <div class="m-2">
+        @if (session()->has('success_') && session('success_')!=="")
+        <div class="alert-success rounded">{{ session('success_') }}</div>
+        @endif
+        @if (session()->has('warning_') && session('warning_')!=="")
+        <div class="alert-warning rounded">{{ session('warning_') }}</div>
+        @endif
+        @if (session()->has('danger_') && session('danger_')!=="")
+        <div class="alert-danger rounded">{{ session('danger_') }}</div>
+        @endif
+        @if (session()->has('error_') && session('error_')!=="")
+        <div class="alert-danger rounded">{{ session('error_') }}</div>
+        @endif
+        @if (session()->has('failed_') && session('failed_')!=="")
+        <div class="alert-danger rounded">{{ session('failed_') }}</div>
+        @endif
+    </div>
+
     {{-- ELEMENT - PHOTOS --}}
     <div class="mt-2">
         <div id="div_item_photos">
@@ -364,72 +382,11 @@
             </div>
         </div>
     </div>
-    @error('tipe_barang')
-    <div class="invalid-feedback">{{ $message }}</div>
-    @enderror
-    @error('tipe_perhiasan')
-    <div class="invalid-feedback">{{ $message }}</div>
-    @enderror
-    @error('jenis_perhiasan')
-    <div class="invalid-feedback">{{ $message }}</div>
-    @enderror
-    @error('range_usia')
-    <div class="text-pink-600">{{ $message }}</div>
-    @enderror
-    @error('warna_emas')
-    <div class="text-pink-600">{{ $message }}</div>
-    @enderror
-    @error('warna_mata')
-    <div class="text-pink-600">{{ $message }}</div>
-    @enderror
-    @error('jumlah_mata')
-    <div class="text-pink-600">{{ $message }}</div>
-    @enderror
-    @error('mainan')
-    <div class="text-pink-600">{{ $message }}</div>
-    @enderror
-    @error('jumlah_mainan')
-    <div class="text-pink-600">{{ $message }}</div>
-    @enderror
-    @error('nampan')
-    <div class="text-pink-600">{{ $message }}</div>
-    @enderror
-    @error('plat')
-    <div class="text-pink-600">{{ $message }}</div>
-    @enderror
-    @error('ukuran')
-    <div class="text-pink-600">{{ $message }}</div>
-    @enderror
-    @error('kadar')
-    <div class="invalid-feedback">{{ $message }}</div>
-    @enderror
-    @error('berat')
-    <div class="invalid-feedback">{{ $message }}</div>
-    @enderror
-    @error('cap')
-    <div class="invalid-feedback">{{ $message }}</div>
-    @enderror
-    @error('kondisi')
-    <div class="invalid-feedback">{{ $message }}</div>
-    @enderror
-    @error('stok')
-    <div class="invalid-feedback">{{ $message }}</div>
-    @enderror
-    @error('merek')
-    <div class="invalid-feedback">{{ $message }}</div>
-    @enderror
-    @error('nama')
-    <div class="invalid-feedback">{{ $message }}</div>
-    @enderror
-    @error('specs')
-    <div class="invalid-feedback">{{ $message }}</div>
-    @enderror
-    @error('kode_item')
-    <div class="invalid-feedback">{{ $message }}</div>
-    @enderror
-    @error('keterangan')
-    <div class="invalid-feedback">{{ $message }}</div>
-    @enderror
+    @if ($errors->any())
+    @foreach ($errors->all() as $error)
+    <div class="text-pink-600">{{ $error }}</div>
+    @endforeach
+    @endif
     <div id="feedback_verifikasi" class="mt-1 hidden"></div>
     <div class="mt-2">
         <button type="submit" class="bg-violet-500 py-4 rounded w-full text-center text-white font-bold">

@@ -28,8 +28,9 @@
     <title>@yield('title')</title>
 </head>
 
-<body>
+<body class="relative">
     {{-- NAVBAR --}}
+    <div id="nav_cart_close_layer" class="absolute top-0 bottom-0 left-0 right-0 hidden z-30" onclick="hideNavCart()"></div>
     <nav class="h-11 bg-violet-500 text-white flex justify-between items-center pl-3" x-data="{show_dd:false}">
         <div class="flex items-center">
             @if ($goback!=='')
@@ -44,13 +45,70 @@
             >
         </div>
         <div class="flex items-center">
+            @auth
+            {{-- NAVBAR - CART --}}
             <div class="relative">
-                <button class="bg-orange-500 text-white rounded p-1" type="button">
+                <button class="bg-orange-500 text-white rounded p-1" type="button" onclick="toggleNavCart()">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
                     </svg>
                 </button>
+                <div class="absolute -bottom-4 flex left-1/2 -translate-x-1/2">
+                    @foreach ($carts_data['carts'] as $key=>$cart)
+                    <div class="rounded-full w-5 h-5 bg-pink-500 flex items-center justify-center @if ($key!==0) -ml-1 @endif">
+                        <span class="text-white font-bold">{{ count($cart->items) }}</span>
+                    </div>
+                    @endforeach
+                </div>
+                <div id="nav_cart" class="absolute -right-5 z-50 bg-white rounded hidden">
+                    <table class="table-nice">
+                        @foreach ($carts_data['carts'] as $key=>$cart)
+                        <tr>
+                            <td>{{ $cart->tipe_pelanggan }}</td>
+                            <td>{{ $carts_data['usernames'][$key] }}</td>
+                            <td>{{ $carts_data['count_items'][$key] }}</td>
+                        {{-- DROPDOWN - CART --}}
+                            <td>
+                                <div id="dd_btn_cart-{{ $key }}" class="rounded bg-white shadow drop-shadow" onclick="showDropdownMultiple(this.id, 'dd_content_cart-{{ $key }}')">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                    </svg>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr id="dd_content_cart-{{ $key }}" class="hidden">
+                            <td colspan="4">
+                                <table>
+                                    @foreach ($cart->items as $item)
+                                    <tr>
+                                        <td>{{ $item->nama }}</td>
+                                    </tr>
+                                    @endforeach
+                                </table>
+                                <div class="flex items-center justify-end">
+                                    <a href="{{ route('carts.show',$cart->id) }}" class="bg-yellow-500 text-white font-bold p-1 rounded">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 4.5l7.5 7.5-7.5 7.5m-6-15l7.5 7.5-7.5 7.5" />
+                                        </svg>
+                                    </a>
+                                    <form action="{{ route('carts.create') }}" class="m-0 ml-1">
+                                        <input type="hidden" name="pelanggan_id" value="{{ $cart->pelanggan_id }}">
+                                        <input type="hidden" name="guest_id" value="{{ $cart->guest_id }}">
+                                        <button type="submit" class="bg-emerald-500 text-white p-1 flex items-center rounded" name="tipe_pelanggan" value="{{ $cart->tipe_pelanggan }}">
+                                            <span class="font-bold">+</span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                                            </svg>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </table>
+                </div>
             </div>
+            @endauth
             <div class="relative" @mouseover="show_dd=true" @mouseleave="show_dd=false">
                 <div class="h-11 flex items-center px-2">
                     <svg
@@ -155,6 +213,27 @@
                 $("#divDropdownIcon-" + id + " img").attr("src", "/img/icons/dropdown.svg");
             }
         }, 450);
+    }
+
+    function showDropdownMultiple(dd_btn_id, dd_content_id) {
+        $selectedDiv = $(`#${dd_content_id}`);
+        // console.log($selectedDiv.css("display"));
+        let dd_content = document.getElementById(dd_content_id);
+        let dd_btn = document.getElementById(dd_btn_id);
+        if ($selectedDiv.css("display") === "block" || $selectedDiv.css("display") === "table-row") {
+            dd_btn.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+            </svg>
+            `;
+        } else {
+            dd_btn.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
+            </svg>
+            `;
+        }
+        $selectedDiv.toggle(400);
     }
 
 

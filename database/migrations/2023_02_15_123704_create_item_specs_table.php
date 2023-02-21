@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('item_specs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('item_id')->constrained()->onDelete('CASCADE');
-            $table->foreignId('spec_id')->nullable()->constrained()->onDelete('SET NULL'); // Kalau spec ada yang di delete, ini ga ikut di delete
+            $table->foreignId('item_id')->constrained()->onDelete('cascade');
+            $table->foreignId('spec_id')->nullable()->constrained()->onDelete('set null'); // Kalau spec ada yang di delete, ini ga ikut di delete
             $table->string('kategori',50);
             $table->smallInteger('jumlah');
         });

@@ -5,7 +5,8 @@
 <div class="p-2">
     <h3>+Cart</h3>
 </div>
-<form method="post" action="{{ route('items.store') }}" class="m-2" enctype="multipart/form-data"
+
+<form method="post" action="{{ route('carts.store') }}" class="m-2" enctype="multipart/form-data"
     x-data="{
         item:{
             tipe_barang:'Perhiasan',
@@ -13,7 +14,25 @@
     }"
     >
     @csrf
-    <div class="flex">
+    {{-- DATA - PELANGGAN --}}
+    <div class="bg-indigo-900 rounded p-2 inline-block">
+        <div class="flex items-center">
+            <label for="pelanggan_id" class="text-yellow-300 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                </svg><span class="font-bold">:</span>
+            </label>
+            @if ($tipe_pelanggan === 'customer')
+            <span class="text-white ml-1">cust. -</span><span class="text-pink-300 font-bold ml-1">{{ $pelanggan->username }} -</span><span class="text-sky-300 font-bold ml-1">{{ $pelanggan->nama }}</span>
+            @elseif ($tipe_pelanggan === 'guest')
+            <span class="text-white ml-1">{{ $tipe_pelanggan }} -</span><span class="text-sky-300 font-bold ml-1">{{ $guest_id }}</span>
+            @endif
+        </div>
+    </div>
+    <input type="hidden" name="tipe_pelanggan" value="{{ $tipe_pelanggan }}" readonly>
+    <input type="hidden" name="pelanggan_id" value="{{ $pelanggan_id }}" readonly>
+    <input type="hidden" name="guest_id" value="{{ $guest_id }}" readonly>
+    <div class="flex mt-1">
         {{-- TIPE BARANG --}}
         <select id="tipe_barang" class="input" x-model="item.tipe_barang" name="tipe_barang" value="{{ old('tipe_barang') }}">
             <option value="">-</option>
@@ -307,82 +326,99 @@
             </div>
         </div>
     </template>
-    <input type="hidden" name="gol_kadar" id="gol_kadar">
+    <input type="hidden" name="gol_kadar" id="gol_kadar" value="{{ old('gol_kadar') }}">
+    <input type="hidden" name="stok" id="stok" value=1>
+    @if ($errors->any())
+    @foreach ($errors->all() as $error)
+    <div class="text-pink-600">{{ $error }}</div>
+    @endforeach
+    @endif
+    <div id="feedback_verifikasi" class="mt-1 hidden"></div>
+
+    <div class="m-2">
+        @if (session()->has('success_') && session('success_')!=="")
+        <div class="alert-success rounded">{{ session('success_') }}</div>
+        @endif
+        @if (session()->has('warning_') && session('warning_')!=="")
+        <div class="alert-warning rounded">{{ session('warning_') }}</div>
+        @endif
+        @if (session()->has('danger_') && session('danger_')!=="")
+        <div class="alert-danger rounded">{{ session('danger_') }}</div>
+        @endif
+        @if (session()->has('error_') && session('error_')!=="")
+        <div class="alert-danger rounded">{{ session('error_') }}</div>
+        @endif
+        @if (session()->has('failed_') && session('failed_')!=="")
+        <div class="alert-danger rounded">{{ session('failed_') }}</div>
+        @endif
+    </div>
+
     <div class="flex justify-center mt-1">
-        <div id="div_item_photos" class="w-1/2">
+        <div id="div_found_item_photos" class="w-1/2 hidden">
             {{-- <item.photos></item.photos> --}}
         </div>
     </div>
-    @error('tipe_barang')
-    <div class="invalid-feedback">{{ $message }}</div>
-    @enderror
-    @error('tipe_perhiasan')
-    <div class="invalid-feedback">{{ $message }}</div>
-    @enderror
-    @error('jenis_perhiasan')
-    <div class="invalid-feedback">{{ $message }}</div>
-    @enderror
-    @error('range_usia')
-    <div class="text-pink-600">{{ $message }}</div>
-    @enderror
-    @error('warna_emas')
-    <div class="text-pink-600">{{ $message }}</div>
-    @enderror
-    @error('warna_mata')
-    <div class="text-pink-600">{{ $message }}</div>
-    @enderror
-    @error('jumlah_mata')
-    <div class="text-pink-600">{{ $message }}</div>
-    @enderror
-    @error('mainan')
-    <div class="text-pink-600">{{ $message }}</div>
-    @enderror
-    @error('jumlah_mainan')
-    <div class="text-pink-600">{{ $message }}</div>
-    @enderror
-    @error('nampan')
-    <div class="text-pink-600">{{ $message }}</div>
-    @enderror
-    @error('plat')
-    <div class="text-pink-600">{{ $message }}</div>
-    @enderror
-    @error('ukuran')
-    <div class="text-pink-600">{{ $message }}</div>
-    @enderror
-    @error('kadar')
-    <div class="invalid-feedback">{{ $message }}</div>
-    @enderror
-    @error('berat')
-    <div class="invalid-feedback">{{ $message }}</div>
-    @enderror
-    @error('cap')
-    <div class="invalid-feedback">{{ $message }}</div>
-    @enderror
-    @error('kondisi')
-    <div class="invalid-feedback">{{ $message }}</div>
-    @enderror
-    @error('stok')
-    <div class="invalid-feedback">{{ $message }}</div>
-    @enderror
-    @error('merek')
-    <div class="invalid-feedback">{{ $message }}</div>
-    @enderror
-    @error('nama')
-    <div class="invalid-feedback">{{ $message }}</div>
-    @enderror
-    @error('specs')
-    <div class="invalid-feedback">{{ $message }}</div>
-    @enderror
-    @error('kode_item')
-    <div class="invalid-feedback">{{ $message }}</div>
-    @enderror
-    @error('keterangan')
-    <div class="invalid-feedback">{{ $message }}</div>
-    @enderror
-    <div id="feedback_verifikasi" class="mt-1 hidden"></div>
+
+    {{-- ELEMENT - PHOTOS --}}
+    <div id="div_new_item_photos" class="mt-2 hidden">
+        {{-- <item.photos></item.photos> --}}
+        <div class="flex">
+            @for ($i = 0; $i < 3; $i++)
+                {{-- <div class="w-24 h-24{class_preview[i]}">
+                    <img src="" alt="avatar_foto" />
+                </div> --}}
+                {{-- {:else} --}}
+                @if ($i!==0)
+                <div class="ml-2">
+                @else
+                <div>
+                @endif
+                    <div id="container-preview-photo-{{ $i }}" class="hidden">
+                        <label for="input-photo-{{ $i }}">
+                            <div class="w-24 h-24">
+                                <img id="preview-photo-{{ $i }}" src="" alt="" class="w-full">
+                            </div>
+                        </label>
+                        <button type="button" class="btn-danger rounded flex justify-center text-white mt-1 w-full" onclick="remove_photo('input-photo-{{ $i }}','container-preview-photo-{{ $i }}','preview-photo-{{ $i }}','label-choose-photo-{{ $i }}')">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                            </svg>
+                        </button>
+                    </div>
+                    <label id="label-choose-photo-{{ $i }}" for="input-photo-{{ $i }}" class="border-8 border-dashed rounded w-24 h-24 flex items-center justify-center">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke-width="1.5"
+                            stroke="currentColor"
+                            class="w-16 h-16 text-slate-300"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z"
+                            />
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z"
+                            />
+                        </svg>
+                    </label>
+
+                </div>
+                <input id="input-photo-{{ $i }}" name="item_photo[]" type="file" accept=".jpg, .jpeg, .png" style="display:none" onchange="preview_photo(this.id,'container-preview-photo-{{ $i }}','preview-photo-{{ $i }}','label-choose-photo-{{ $i }}')"/>
+            @endfor
+        </div>
+    </div>
+
+    {{-- END - ELEMENT PHOTOS --}}
+    <input type="hidden" name="found_kode_item" id="found_kode_item">
+    <input type="hidden" name="found_item_id" id="found_item_id">
     <div class="mt-2">
         <button type="button" class="bg-emerald-500 py-4 rounded w-full text-center text-white font-bold flex items-center justify-center" onclick="cariItem()">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
             </svg>
             <span>
@@ -454,6 +490,7 @@
 
     function setOpsiJenisPerhiasan(kode_tipe) {
         // console.log(kode_tipe);
+        jenis_perhiasan = [];
         let results;
         if (kode_tipe!=='') {
             results=specs.filter(spec=>spec.kategori==='tipe_perhiasan'&&spec.kode_tipe===kode_tipe);
@@ -706,6 +743,30 @@
 
     function select_cap(value) {
         document.getElementById('input-cap').value=value;
+    }
+    // FUNGSI - PHOTO
+    function preview_photo(input_id,container_preview_photo_id,preview_photo_id,label_choose_photo_id) {
+        const el_input = document.getElementById(input_id);
+        const el_container_preview_photo = document.getElementById(container_preview_photo_id);
+        const el_preview_photo = document.getElementById(preview_photo_id);
+        const el_label_choose_photo = document.getElementById(label_choose_photo_id);
+        // console.log(el_input.files[0]);
+        const blob = URL.createObjectURL(el_input.files[0]);
+        el_preview_photo.src=blob;
+        el_container_preview_photo.classList.remove('hidden');
+        el_label_choose_photo.classList.add('hidden');
+    }
+
+    function remove_photo(input_id,container_preview_photo_id,preview_photo_id,label_choose_photo_id) {
+        const el_input = document.getElementById(input_id);
+        const el_container_preview_photo = document.getElementById(container_preview_photo_id);
+        const el_preview_photo = document.getElementById(preview_photo_id);
+        const el_label_choose_photo = document.getElementById(label_choose_photo_id);
+        el_input.value=null;
+        el_preview_photo.src=null;
+        console.log(el_container_preview_photo);
+        el_container_preview_photo.classList.add('hidden');
+        el_label_choose_photo.classList.remove('hidden');
     }
 
     // FUNGSI - CODENAME
@@ -1162,27 +1223,40 @@
             }
         }
 
-
-        if (itemExist) {
-            console.log(found_items[0].id);
-            const div_item_photos = document.getElementById('div_item_photos');
-            found_photos = item_photos.filter((el)=>el.item_id.toString().indexOf(found_items[0].id.toString()) > -1);
-            let img_photos = '';
-            found_photos.forEach(element => {
-                img_photos += `<img src="${window.location.origin}/storage/${element.path}" class="border-4 border-slate-300 rounded shadow box-shadow">`;
-            });
-            div_item_photos.innerHTML=img_photos;
-            // console.log(found_photos);
+        if (passed) {
+            if (itemExist) {
+                // console.log(found_items[0]);
+                // console.log(found_items[0].id);
+                document.getElementById('found_kode_item').value=found_items[0].kode_item;
+                document.getElementById('found_item_id').value=found_items[0].id;
+                const div_found_item_photos = document.getElementById('div_found_item_photos');
+                found_photos = item_photos.filter((el)=>el.item_id.toString().indexOf(found_items[0].id.toString()) > -1);
+                let img_photos = '';
+                found_photos.forEach(element => {
+                    img_photos += `<img src="${window.location.origin}/storage/${element.path}" class="border-4 border-slate-300 rounded shadow box-shadow">`;
+                });
+                div_found_item_photos.innerHTML=img_photos;
+                $('#div_found_item_photos').show(300);
+                $(`#div_new_item_photos`).hide(300);
+                // console.log(found_photos);
+            } else {
+                $(`#div_new_item_photos`).show(300);
+                $('#div_found_item_photos').hide(300);
+            }
         }
 
         if (passed) {
             const div_btn_submit = document.getElementById('div_btn_submit');
             div_btn_submit.innerHTML = `
-            <button type="submit" class="bg-violet-500 py-4 rounded w-full text-center text-white font-bold">
-                +Tambah ke Stock
+            <button type="submit" class="bg-violet-500 py-4 rounded w-full text-white font-bold flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
+                </svg>
+                <span>+Tambah ke Cart</span>
             </button>
             `;
         }
+
     }
 </script>
 @endsection
