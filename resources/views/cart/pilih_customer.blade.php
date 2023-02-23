@@ -52,11 +52,11 @@
             <td>{{ $carts_data['count_items'][$key] }}</td>
             <td>
                 <div class="flex items-center">
-                    <a href="{{ route('carts.show',$cart->id) }}" class="bg-yellow-500 text-white font-bold p-1 rounded">
+                    {{-- <a href="{{ route('carts.show',$cart->id) }}" class="bg-yellow-500 text-white font-bold p-1 rounded">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 4.5l7.5 7.5-7.5 7.5m-6-15l7.5 7.5-7.5 7.5" />
                         </svg>
-                    </a>
+                    </a> --}}
                     <form action="{{ route('carts.create') }}" class="m-0 ml-1">
                         <input type="hidden" name="pelanggan_id" value="{{ $cart->pelanggan_id }}">
                         <input type="hidden" name="guest_id" value="{{ $cart->guest_id }}">
@@ -122,9 +122,6 @@
             $(`#${form_name}`).show(300);
             $(`#customer`).hide(300);
         }
-    }
-    function verifikasiDataPelanggan() {
-
     }
 </script>
 @endsection

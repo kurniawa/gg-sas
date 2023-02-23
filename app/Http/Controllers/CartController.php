@@ -7,6 +7,7 @@ use App\Models\CartItem;
 use App\Models\Item;
 use App\Models\ItemPhoto;
 use App\Models\ItemSpec;
+use App\Models\KadarHarga;
 use App\Models\Spec;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -36,6 +37,9 @@ class CartController extends Controller
         // dump($carts);
         // dd($carts_unique);
         $carts_data = Cart::getCartsItemPerUser();
+        // dd($carts_data['carts'][0]->items->pluck('id')[0]);
+        // dump(CartItem::find(1));
+        // dd(CartItem::find('1'));
         $data = [
             'goback'=>'home',
             'carts_data'=>$carts_data,
@@ -67,11 +71,9 @@ class CartController extends Controller
         } else {
             $request->validate(['error'=>'required'],['error.required'=>'Ada kesalahan input pelanggan!']);
         }
-        // $carts = Cart::getCartItemsCorrespondingUser();
-        $carts = Cart::all();
         $data = [
             'goback'=>'carts.pilih_customer',
-            'carts'=>$carts,
+            'carts_data'=>Cart::getCartsItemPerUser(),
             'pelanggan'=>$pelanggan,
             'tipe_pelanggan'=>$post['tipe_pelanggan'],
         ];
@@ -213,16 +215,23 @@ class CartController extends Controller
             $last_item = Item::where('tipe_perhiasan',$new_item->tipe_perhiasan)->where('gol_kadar',$new_item->gol_kadar)->where('id','!=',$new_item->id)->latest()->first();
             // dd($barcodes);
             // dd($last_item);
+            $barcode = null;
             if ($last_item===null) {
                 $barcodes = Spec::where('kategori','barcode')->get();
                 $gol_kadar = Spec::where('kategori','gol_kadar')->where('nama',$new_item->gol_kadar)->first();
                 $barcode = $barcodes->where('kode_tipe',$new_item->tipe_perhiasan)->first()->nomor_tipe * 10000 + $gol_kadar->name_id;
                 // dd($barcode);
                 // $barcode = $barcode->nomor_tipe * 10000;
+                $success_ .= " Belum ada tipe_perhiasan dengan gol_kadar yang sama! Barcode: $barcode";
             } else {
-                $barcode = $new_item->barcode++;
+                $barcode = $last_item->barcode + 1;
+                // dump($last_item->barcode);
+                // dump($last_item->barcode++);
+                // dump($last_item->barcode + 1);
+                // dd((int)$last_item->barcode + 1);
+                $success_ .= " Sudah ada barcode untuk tipe_perhiasan dan gol_kadar yang sama. Barcode: $barcode";
             }
-            $new_item->barcode=$barcode;
+            $new_item->barcode = $barcode;
             $new_item->save();
             $item_to_insert = $new_item;
             $success_ .= ' Barcode diupdate!';
@@ -249,7 +258,7 @@ class CartController extends Controller
                         'path'=>$path
                     ]);
                 }
-                $success_.=' Photo diupload!';
+                $success_ .= ' Photo diupload!';
             }
 
         }
@@ -304,13 +313,34 @@ class CartController extends Controller
     public function show(Cart $cart)
     {
         // dump($cart);
-        // dd($cart->items());
-        $test = Cart::find($cart->id);
-        dump($test);
-        foreach ($test->items as $item) {
-            dump($item);
+        // dd($cart->items);
+        $pelanggan = null;
+        $pelanggan_id = null;
+        $guest_id = null;
+        if ($cart->tipe_pelanggan === 'customer') {
+            $pelanggan = User::find($cart->pelanggan_id);
+            $pelanggan_id = $pelanggan->id;
+        } else {
+            $guest_id = $cart->guest_id;
         }
-        dd($test->items);
+
+        $cart_items = CartItem::where('cart_id',$cart->id)->get();
+        $kadar_hargas = [];
+        foreach ($cart->items as $item) {
+            $kadar_harga = KadarHarga::where('kadar',$item->kadar)->first();
+            $kadar_hargas[] = $kadar_harga;
+        }
+        $data = [
+            'goback'=>'home',
+            'carts_data'=>Cart::getCartsItemPerUser(),
+            'cart'=>$cart,
+            'cart_items'=>$cart_items,
+            'kadar_hargas'=>$kadar_hargas,
+            'pelanggan'=>$pelanggan,
+            'pelanggan_id'=>$pelanggan_id,
+            'guest_id'=>$guest_id,
+        ];
+        return view('cart.show', $data);
     }
 
     /**

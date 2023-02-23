@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CartItemController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PelangganController;
@@ -38,6 +39,7 @@ Route::controller(CartController::class)->group(function(){
     Route::get('/carts/verifikasi_customer','verifikasi_customer')->name('carts.verifikasi_customer')->middleware('admin');
 });
 Route::resource('carts',CartController::class)->middleware('admin');
+Route::resource('carts.items',CartItemController::class)->middleware('admin');
 // ITEMS
 
 

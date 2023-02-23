@@ -31,8 +31,9 @@ return new class extends Migration
             $table->string('kondisi',50)->nullable();
             $table->string('nama');
             $table->smallInteger('stok'); // smallint    | 2 bytes  -32768 to 32767                              0 to 65535
-            $table->string('kode_item',50);
-            $table->integer('barcode')->nullable();
+            $table->string('specs');
+            $table->string('kode_item',100);
+            $table->integer('barcode')->nullable()->unique();
             $table->string('keterangan')->nullable();
             $table->timestamps();
         });

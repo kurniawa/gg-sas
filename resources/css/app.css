@@ -126,4 +126,18 @@ h3 {
     @apply py-2.5 px-3 text-slate-700;
 }
 
+/* Table */
+.table-slim {
+    @apply shadow-lg rounded-lg;
+}
+/* .table-slim tr {
+    @apply border-b;
+} */
+.table-slim tr th {
+    @apply py-1 bg-slate-50 text-slate-600;
+}
+.table-slim tr td {
+    @apply py-1 px-1 text-slate-700;
+}
+
 @tailwind utilities;

@@ -28,11 +28,10 @@ class ItemController extends Controller
             $arr_item_photos[]=$item_photos;
         }
         $goback='home';
-        // $carts = Cart::getCartItemsCorrespondingUser();
         $data=[
             'items'=>$items,
             'arr_item_photos'=>$arr_item_photos,
-            'carts'=>Cart::all(),
+            'carts_data'=>Cart::getCartsItemPerUser(),
             'goback'=>$goback,
         ];
         // dd($data);
@@ -47,7 +46,7 @@ class ItemController extends Controller
     public function create()
     {
         $data=Item::getSpecs();
-        $data+= array('goback' => 'items.index');
+        $data+= array('goback' => 'items.index', 'carts_data'=>Cart::getCartsItemPerUser());
         return view('item.tambah_item',$data);
     }
 
@@ -136,8 +135,10 @@ class ItemController extends Controller
             $barcode = $barcodes->where('kode_tipe',$new_item->tipe_perhiasan)->first()->nomor_tipe * 10000 + $gol_kadar->name_id;
             // dd($barcode);
             // $barcode = $barcode->nomor_tipe * 10000;
+            $success_ .= " Belum ada tipe_perhiasan dengan gol_kadar yang sama! Barcode: $barcode";
         } else {
-            $barcode = $new_item->barcode++;
+            $barcode = $last_item->barcode + 1;
+            $success_ .= " Sudah ada barcode untuk tipe_perhiasan dan gol_kadar yang sama. Barcode: $barcode";
         }
         $new_item->barcode=$barcode;
         $new_item->save();

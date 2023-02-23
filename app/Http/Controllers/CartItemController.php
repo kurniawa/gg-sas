@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
 use App\Models\CartItem;
+use App\Models\Item;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CartItemController extends Controller
 {
@@ -46,7 +49,7 @@ class CartItemController extends Controller
      */
     public function show(CartItem $cartItem)
     {
-        //
+        dd('show');
     }
 
     /**
@@ -78,8 +81,29 @@ class CartItemController extends Controller
      * @param  \App\Models\CartItem  $cartItem
      * @return \Illuminate\Http\Response
      */
-    public function destroy(CartItem $cartItem)
+    public function destroy($cartItem_id, $item_id)
     {
-        //
+        // dd($cartItem_id);
+        $cartItem = CartItem::find($cartItem_id);
+        $cartItem->delete();
+
+        // CEK APAKAH $user ini masih punya $cart yang lain?
+
+        $carts = Cart::where('user_id', Auth::user()->id)->get();
+        if (count($carts) !== 0) {
+            foreach ($carts as $cart) {
+                if (count($cart->items) === 0) {
+                    $cart->delete();
+                }
+            }
+        }
+
+        // // CEK APAKAH $carts UEBERHAUPT MASIH ADA DI DATABASE - KALAU TIDAK ADA MAKA TRUNCATE
+        // $carts_all = Cart::all();
+        // if (count($carts_all) === 0) {
+        //     Cart::truncate();
+        // }
+
+        return back();
     }
 }
