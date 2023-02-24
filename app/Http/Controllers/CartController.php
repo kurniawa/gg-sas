@@ -44,6 +44,7 @@ class CartController extends Controller
             'goback'=>'home',
             'carts_data'=>$carts_data,
         ];
+        // dd($data);
         return view('cart.pilih_customer', $data);
     }
 
@@ -236,31 +237,31 @@ class CartController extends Controller
             $item_to_insert = $new_item;
             $success_ .= ' Barcode diupdate!';
 
-            // UPLOAD PHOTO - IF EXIST
-            $files = $request->file('item_photo');
-            // dd($files);
-            // dd($files[1]);
-            if ($files!==null) {
-                foreach ($files as $file) {
-                    $photo_name="IP-". uniqid() . "." . $file->getClientOriginalExtension();
-                    // $path = Storage::putFileAs(
-                    //     'public/images/item_photos', $file, $photo_name
-                    // );
-                    $path=$file->storeAs('public/images/item-photos',$photo_name);
-                    $path = str_replace('public/','',$path); // aneh sih, path nya yang public mesti diilangin dulu, baru nanti bisa dipanggil pake asset
-                    // $path = $file->storePubliclyAs(
-                    //     'images/item-photos',
-                    //     $photo_name,
-                    //     's3'
-                    // );
-                    ItemPhoto::create([
-                        'item_id'=>$new_item->id,
-                        'path'=>$path
-                    ]);
-                }
-                $success_ .= ' Photo diupload!';
-            }
+        }
 
+        // UPLOAD PHOTO - IF EXIST - dipindah di luar if diatas, karena tetep bisa upload foto meski item sudah ada.
+        $files = $request->file('item_photo');
+        // dd($files);
+        // dd($files[1]);
+        if ($files!==null) {
+            foreach ($files as $file) {
+                $photo_name="IP-". uniqid() . "." . $file->getClientOriginalExtension();
+                // $path = Storage::putFileAs(
+                //     'public/images/item_photos', $file, $photo_name
+                // );
+                $path=$file->storeAs('public/images/item-photos',$photo_name);
+                $path = str_replace('public/','',$path); // aneh sih, path nya yang public mesti diilangin dulu, baru nanti bisa dipanggil pake asset
+                // $path = $file->storePubliclyAs(
+                //     'images/item-photos',
+                //     $photo_name,
+                //     's3'
+                // );
+                ItemPhoto::create([
+                    'item_id'=>$item_to_insert->id,
+                    'path'=>$path
+                ]);
+            }
+            $success_ .= ' Photo diupload!';
         }
 
         // $pelanggan_id = null;
@@ -272,7 +273,7 @@ class CartController extends Controller
         // }
         if ($item_to_insert !== null) {
             // CEK SEKALI LAGI APAKAH ADA CART DENGAN PELANGGAN ATAU GUEST ID YANG SAMA
-            $cart_cek = Cart::where('pelanggan_id',$post['pelanggan_id'])->where('guest_id',$post['guest_id'])->first();
+            $cart_cek = Cart::where('user_id',Auth::user()->id)->where('pelanggan_id',$post['pelanggan_id'])->where('guest_id',$post['guest_id'])->first();
             // dd($post['guest_id']);
             if ($cart_cek !== null) {
                 CartItem::create([

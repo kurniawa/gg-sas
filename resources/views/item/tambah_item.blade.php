@@ -204,7 +204,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                                 </svg>
                             </button>
-                            <span class="ml-2 font-bold">Ukuran</span>
+                            <span class="ml-2 font-bold">Ukuran(mm)</span>
                         </div>
                         <div id="div-child-ukuran" class="hidden">
                             <div class="flex items-center mt-1">
@@ -671,6 +671,7 @@
     function hide_plat() {
         document.getElementById('div-child-plat').classList.add('hidden');
         input_plat.value = null;
+        generateNama();
     }
 
     function memorizeValue_plat(value) {
@@ -689,6 +690,7 @@
     function hide_ukuran() {
         document.getElementById('div-child-ukuran').classList.add('hidden');
         input_ukuran.value = null;
+        generateNama();
     }
 
     function memorizeValue_ukuran(value) {
@@ -997,21 +999,24 @@
         let s_plat;
         let c_plat;
         if (plat!==null) {
-            if (plat.value!==0) {
+            if (plat.value == 0 || plat.value === '') {
+                n_plat='';
+                s_plat=' pl.0';
+                c_plat='-0';
+            } else if (!isNaN(plat.value)) {
                 n_plat=` pl.${plat.value}`;
                 s_plat='';
                 c_plat=`-${plat.value}`;
             } else {
-                n_plat=' pl.ERR';
-                s_plat=' pl.ERR';
+                n_plat='';
+                s_plat=' pl.X';
                 c_plat=`-400`;
             }
         } else {
-            n_plat='';
-            s_plat=' pl.0';
-            c_plat='-0';
+            n_plat=' pl.X';
+            s_plat=' pl.X';
+            c_plat=`-400`;
         }
-        // console.log(plat);
 
         // 8 - Ukuran
         const ukuran = document.getElementById('input_ukuran');
@@ -1019,24 +1024,32 @@
         let s_ukuran;
         let c_ukuran;
         if (ukuran!==null) {
-            let str_uk_value = ukuran.value.toString();
-            // console.log(str_uk_value);
-            // console.log(str_uk_value[0]);
-            let s_uk='';
-            for (let i = 0; i < str_uk_value.length; i++) {
-                if (arr_ukuran_id.includes(parseInt(str_uk_value[i]))) {
-                    s_uk+=arr_ukuran_codename[arr_ukuran_id.indexOf(parseInt(str_uk_value[i]))];
-                } else {
-                    s_uk+='ERR';
+            if (ukuran.value == 0 || ukuran.value === '') {
+                n_ukuran='';
+                s_ukuran=' uk.0';
+                c_ukuran='-0';
+            } else if (!isNaN(ukuran.value)) {
+                let str_uk_value = ukuran.value.toString();
+                let s_uk='';
+                for (let i = 0; i < str_uk_value.length; i++) {
+                        if (arr_ukuran_id.includes(parseInt(str_uk_value[i]))) {
+                            s_uk+=arr_ukuran_codename[arr_ukuran_id.indexOf(parseInt(str_uk_value[i]))];
+                        } else {
+                            s_uk+=' uk.ERR';
+                        }
                 }
+                n_ukuran='';
+                s_ukuran=` uk.${s_uk}`;
+                c_ukuran=`-${ukuran.value}`;
+            } else {
+                n_ukuran='';
+                s_ukuran=' uk.ERR';
+                c_ukuran=`-400`;
             }
-            n_ukuran='';
-            s_ukuran=` uk.${s_uk}`;
-            c_ukuran=`-${ukuran.value}`;
         } else {
             n_ukuran='';
-            s_ukuran=' uk.0';
-            c_ukuran='-0';
+            s_ukuran=' uk.ERR';
+            c_ukuran=`-400`;
         }
 
         // 9 - Kadar

@@ -228,7 +228,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                                 </svg>
                             </button>
-                            <span class="ml-2 font-bold">Ukuran</span>
+                            <span class="ml-2 font-bold">Ukuran(mm)</span>
                         </div>
                         <div id="div-child-ukuran" class="hidden">
                             <div class="flex items-center mt-1">
@@ -712,6 +712,7 @@
     function hide_plat() {
         document.getElementById('div-child-plat').classList.add('hidden');
         input_plat.value = null;
+        generateNama();
     }
 
     function memorizeValue_plat(value) {
@@ -730,6 +731,7 @@
     function hide_ukuran() {
         document.getElementById('div-child-ukuran').classList.add('hidden');
         input_ukuran.value = null;
+        generateNama();
     }
 
     function memorizeValue_ukuran(value) {
@@ -1036,20 +1038,27 @@
         let n_plat;
         let s_plat;
         let c_plat;
+        // console.log(plat.value);
+        // console.log(parseInt(plat.value));
+        // console.log(plat.value.toString());
         if (plat!==null) {
-            if (plat.value!==0) {
+            if (plat.value == 0 || plat.value === '') {
+                n_plat='';
+                s_plat=' pl.0';
+                c_plat='-0';
+            } else if (!isNaN(plat.value)) {
                 n_plat=` pl.${plat.value}`;
                 s_plat='';
                 c_plat=`-${plat.value}`;
             } else {
-                n_plat=' pl.ERR';
-                s_plat=' pl.ERR';
+                n_plat='';
+                s_plat=' pl.X';
                 c_plat=`-400`;
             }
         } else {
-            n_plat='';
-            s_plat=' pl.0';
-            c_plat='-0';
+            n_plat=' pl.X';
+            s_plat=' pl.X';
+            c_plat=`-400`;
         }
         // console.log(plat);
 
@@ -1059,24 +1068,40 @@
         let s_ukuran;
         let c_ukuran;
         if (ukuran!==null) {
-            let str_uk_value = ukuran.value.toString();
-            // console.log(str_uk_value);
-            // console.log(str_uk_value[0]);
-            let s_uk='';
-            for (let i = 0; i < str_uk_value.length; i++) {
-                if (arr_ukuran_id.includes(parseInt(str_uk_value[i]))) {
-                    s_uk+=arr_ukuran_codename[arr_ukuran_id.indexOf(parseInt(str_uk_value[i]))];
-                } else {
-                    s_uk+='ERR';
+            if (ukuran.value == 0 || ukuran.value === '') {
+                n_ukuran='';
+                s_ukuran=' uk.0';
+                c_ukuran='-0';
+            } else if (!isNaN(ukuran.value)) {
+                let str_uk_value = ukuran.value.toString();
+                // console.log(str_uk_value);
+                // console.log(str_uk_value[0]);
+                let s_uk='';
+                for (let i = 0; i < str_uk_value.length; i++) {
+                    // console.log(str_uk_value[i].toString());
+                    // if (str_uk_value[i] !== '.' || str_uk_value[i] !== ',') {
+                        if (arr_ukuran_id.includes(parseInt(str_uk_value[i]))) {
+                            s_uk+=arr_ukuran_codename[arr_ukuran_id.indexOf(parseInt(str_uk_value[i]))];
+                        } else {
+                            s_uk+=' uk.ERR';
+                        }
+                    // } else {
+                    //     console.log('ukuran ada koma');
+                    //     s_uk += '.';
+                    // }
                 }
+                n_ukuran='';
+                s_ukuran=` uk.${s_uk}`;
+                c_ukuran=`-${ukuran.value}`;
+            } else {
+                n_ukuran='';
+                s_ukuran=' uk.ERR';
+                c_ukuran=`-400`;
             }
-            n_ukuran='';
-            s_ukuran=` uk.${s_uk}`;
-            c_ukuran=`-${ukuran.value}`;
         } else {
             n_ukuran='';
-            s_ukuran=' uk.0';
-            c_ukuran='-0';
+            s_ukuran=' uk.ERR';
+            c_ukuran=`-400`;
         }
 
         // 9 - Kadar
@@ -1210,6 +1235,7 @@
         let found_items = [];
         let found_photos = [];
         let itemExist = false;
+        let feedback_text = '';
         if (passed) {
             found_items=items.filter((item)=>item.kode_item.indexOf(kode_item) > -1);
             // console.log(found_items);
@@ -1218,14 +1244,14 @@
                 div_feedback_verifikasi.classList.remove('alert-danger');
                 div_feedback_verifikasi.classList.remove('alert-success');
                 div_feedback_verifikasi.classList.add('alert-warning');
-                div_feedback_verifikasi.textContent = 'WARN: Item sudah ada!';
+                feedback_text += 'WARN: Item sudah ada!';
                 itemExist = true;
             } else {
                 div_feedback_verifikasi.classList.remove('hidden');
                 div_feedback_verifikasi.classList.remove('alert-danger');
                 div_feedback_verifikasi.classList.remove('alert-warning');
                 div_feedback_verifikasi.classList.add('alert-success');
-                div_feedback_verifikasi.textContent = 'SUCC: Item belum ada!';
+                feedback_text += 'SUCC: Item belum ada!';
             }
         }
 
@@ -1237,14 +1263,20 @@
                 document.getElementById('found_item_id').value=found_items[0].id;
                 const div_found_item_photos = document.getElementById('div_found_item_photos');
                 found_photos = item_photos.filter((el)=>el.item_id.toString().indexOf(found_items[0].id.toString()) > -1);
-                let img_photos = '';
-                found_photos.forEach(element => {
-                    img_photos += `<img src="${window.location.origin}/storage/${element.path}" class="border-4 border-slate-300 rounded shadow box-shadow">`;
-                });
-                div_found_item_photos.innerHTML=img_photos;
-                $('#div_found_item_photos').show(300);
-                $(`#div_new_item_photos`).hide(300);
                 // console.log(found_photos);
+                if (found_photos.length !== 0) {
+                    let img_photos = '';
+                    found_photos.forEach(element => {
+                        img_photos += `<img src="${window.location.origin}/storage/${element.path}" class="border-4 border-slate-300 rounded shadow box-shadow">`;
+                    });
+                    div_found_item_photos.innerHTML=img_photos;
+                    $('#div_found_item_photos').show(300);
+                    $(`#div_new_item_photos`).hide(300);
+                } else {
+                    feedback_text += ' Photo Item belum ada!';
+                    $(`#div_new_item_photos`).show(300);
+                    $('#div_found_item_photos').hide(300);
+                }
             } else {
                 $(`#div_new_item_photos`).show(300);
                 $('#div_found_item_photos').hide(300);
@@ -1262,6 +1294,9 @@
             </button>
             `;
         }
+
+        div_feedback_verifikasi.textContent = feedback_text;
+
 
     }
 </script>
