@@ -33,6 +33,10 @@ Route::controller(LoginController::class)->group(function(){
 
 Route::resource('items',ItemController::class)->middleware('auth');
 Route::resource('pelanggans',PelangganController::class)->middleware('admin');
+Route::controller(PembelianController::class)->group(function ()
+{
+    Route::get('/pembelians/konfirmasi_data_pelanggan','konfirmasi_data_pelanggan')->name('pembelians.konfirmasi_data_pelanggan')->middleware('admin');
+});
 Route::resource('pembelians',PembelianController::class)->middleware('admin');
 Route::controller(CartController::class)->group(function(){
     Route::get('/carts/pilih_customer','pilih_customer')->name('carts.pilih_customer')->middleware('admin');

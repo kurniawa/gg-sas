@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
 use App\Models\Item;
 use App\Models\Pembelian;
 use Illuminate\Http\Request;
@@ -15,10 +16,19 @@ class PembelianController extends Controller
      */
     public function index()
     {
-        // $pembelians=Pembelian::latest()->limit(300)->get();
-        $data = Item::getSpecs();
-        $data+=array('goback'=>'home');
-        return view('pembelian.cart-create', $data);
+        //
+    }
+
+    public function konfirmasi_data_pelanggan(Request $request)
+    {
+        $get = $request->query();
+        // dd($get);
+        $data = [
+            'goback'=>'carts.show',
+            'previous_data'=>$get['cart_id'],
+            'carts_data'=>Cart::getCartsItemPerUser(),
+        ];
+        return view('pembelian.konfirmasi_data_pelanggan', $data);
     }
 
     /**

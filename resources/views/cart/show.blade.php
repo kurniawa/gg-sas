@@ -108,10 +108,12 @@
         @endforeach
     </table>
 
-    <form action="" method="" class="mt-2">
-        <input type="hidden" name="tipe_pelanggan" value="{{ $cart->tipe_pelanggan }}" readonly>
-        <input type="hidden" name="pelanggan_id" value="{{ $pelanggan_id }}" readonly>
-        <input type="hidden" name="guest_id" value="{{ $guest_id }}" readonly>
+    @if ($cart->tipe_pelanggan === 'guest')
+    <form action="{{ route('pembelians.konfirmasi_data_pelanggan') }}" method="GET" class="mt-2">
+    @elseif ($cart->tipe_pelanggan === 'customer')
+    <form action="{{ route('pembelians.create') }}" method="GET" class="mt-2">
+    @endif
+        <input type="hidden" name="cart_id" value="{{ $cart->id }}" readonly>
         <button class="btn-emerald rounded py-3 w-full text-lg">
             Proses Pembayaran
         </button>

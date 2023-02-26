@@ -35,7 +35,11 @@
     <nav class="h-11 bg-violet-500 text-white flex justify-between items-center pl-3" x-data="{show_dd:false}">
         <div class="flex items-center">
             @if ($goback!=='')
+            @if (isset($previous_data))
+            <a href="{{ route($goback, $previous_data) }}" class="text-white font-bold bg-orange-500 rounded p-1">
+            @else
             <a href="{{ route($goback) }}" class="text-white font-bold bg-orange-500 rounded p-1">
+            @endif
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="6" stroke="currentColor" class="w-5 h-5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
                 </svg>
