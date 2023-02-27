@@ -35,7 +35,11 @@ Route::resource('items',ItemController::class)->middleware('auth');
 Route::resource('pelanggans',PelangganController::class)->middleware('admin');
 Route::controller(PembelianController::class)->group(function ()
 {
-    Route::get('/pembelians/konfirmasi_data_pelanggan','konfirmasi_data_pelanggan')->name('pembelians.konfirmasi_data_pelanggan')->middleware('admin');
+    Route::post('/pembelians/konfirmasi_data_pelanggan','konfirmasi_data_pelanggan')->name('pembelians.konfirmasi_data_pelanggan')->middleware('admin');
+    Route::post('/pembelians/methode_pembayaran','methode_pembayaran')->name('pembelians.methode_pembayaran')->middleware('admin');
+    // FOR TESTING
+    Route::get('/pembelians/test_konfirmasi_data_pelanggan','test_konfirmasi_data_pelanggan')->name('pembelians.test_konfirmasi_data_pelanggan')->middleware('admin');
+    Route::get('/pembelians/test_methode_pembayaran','test_methode_pembayaran')->name('pembelians.test_methode_pembayaran')->middleware('admin');
 });
 Route::resource('pembelians',PembelianController::class)->middleware('admin');
 Route::controller(CartController::class)->group(function(){

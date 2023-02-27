@@ -33,6 +33,7 @@ class UserSeeder extends Seeder
                 'username' => $users[$i]['username'],
                 'password' => $password,
                 'role' => $users[$i]['role'],
+                'phone' => "0000$i"
             ]);
         }
     }

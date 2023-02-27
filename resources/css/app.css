@@ -97,13 +97,13 @@ h3 {
     @apply border border-slate-300 py-1 rounded;
 }
 .alert-success {
-    @apply font-semibold w-full px-3 py-2 rounded bg-emerald-200 text-emerald-600 opacity-70;
+    @apply font-semibold px-3 py-2 rounded bg-emerald-200 text-emerald-600 opacity-70;
 }
 .alert-warning {
-    @apply font-semibold w-full px-3 py-2 rounded bg-yellow-200 text-yellow-600 opacity-70;
+    @apply font-semibold px-3 py-2 rounded bg-yellow-200 text-yellow-600 opacity-70;
 }
 .alert-danger {
-    @apply font-semibold w-full px-3 py-2 rounded bg-red-200 text-red-600 opacity-70;
+    @apply font-semibold px-3 py-2 rounded bg-red-200 text-red-600 opacity-70;
 }
 .is-invalid {
     @apply text-pink-700 focus:ring-pink-700;

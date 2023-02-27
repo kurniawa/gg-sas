@@ -32,7 +32,7 @@
             @if ($cart->tipe_pelanggan === 'customer')
             <span class="text-white ml-1">cust. -</span><span class="text-pink-300 font-bold ml-1">{{ $pelanggan->username }} -</span><span class="text-sky-300 font-bold ml-1">{{ $pelanggan->nama }}</span>
             @elseif ($cart->tipe_pelanggan === 'guest')
-            <span class="text-white ml-1">{{ $cart->tipe_pelanggan }} -</span><span class="text-sky-300 font-bold ml-1">{{ $guest_id }}</span>
+            <span class="text-white ml-1">{{ $cart->tipe_pelanggan }} -</span><span class="text-sky-300 font-bold ml-1">{{ $cart->guest_id }}</span>
             @endif
         </div>
     </div>
@@ -93,13 +93,13 @@
                     </div>
                     <table>
                         <tr>
-                            <td>Ongkos</td><td>:</td><td><div class="toFormatCurrencyRp rounded font-bold bg-pink-100">{{ $kadar_hargas[$key]->ongkos }}</div></td>
+                            <td>Ongkos</td><td>:</td><td><div class="toFormatCurrencyRp rounded font-bold bg-pink-100">{{ $cart_items[$key]->ongkos }}</div></td>
                         </tr>
                         <tr>
-                            <td>Harga/g</td><td>:</td><td><div class="toFormatCurrencyRp rounded font-bold bg-orange-100">{{ $kadar_hargas[$key]->harga }}</div></td>
+                            <td>Harga/g</td><td>:</td><td><div class="toFormatCurrencyRp rounded font-bold bg-orange-100">{{ $cart_items[$key]->harga }}</div></td>
                         </tr>
                         <tr>
-                            <td>Harga Total</td><td>:</td><td><div class="toFormatCurrencyRp rounded font-bold bg-emerald-100">{{ $kadar_hargas[$key]->harga * $item->berat }}</div></td>
+                            <td>Harga Total</td><td>:</td><td><div class="toFormatCurrencyRp rounded font-bold bg-emerald-100">{{ $cart_items[$key]->harga_total }}</div></td>
                         </tr>
                     </table>
                 </div>
@@ -108,10 +108,11 @@
         @endforeach
     </table>
 
-    <form action="{{ route('pembelians.create') }}" method="GET" class="mt-2">
+    <form action="{{ route('pembelians.store') }}" method="POST" class="mt-2">
+        @csrf
         <input type="hidden" name="cart_id" value="{{ $cart->id }}" readonly>
         <button class="btn-emerald rounded py-3 w-full text-lg">
-            Proses Pembayaran
+            Konfirmasi Pembayaran
         </button>
     </form>
 </div>

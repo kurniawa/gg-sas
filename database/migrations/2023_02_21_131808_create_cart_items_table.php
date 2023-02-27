@@ -18,6 +18,9 @@ return new class extends Migration
             $table->foreignId('cart_id')->constrained()->onDelete('cascade');
             $table->foreignId('item_id')->nullable()->constrained()->onDelete('set null');
             $table->smallInteger('jumlah')->default(1);
+            $table->integer('ongkos');
+            $table->integer('harga');
+            $table->integer('harga_total');
         });
     }
 

@@ -271,31 +271,39 @@ class CartController extends Controller
         // } elseif ($post['tipe_pelanggan'] === 'guest') {
         //     $pelanggan_id = $post['pelanggan_id'];
         // }
-        if ($item_to_insert !== null) {
+        if ($item_to_insert === null) {
             // CEK SEKALI LAGI APAKAH ADA CART DENGAN PELANGGAN ATAU GUEST ID YANG SAMA
+            $failed_ .= 'Ada kesalahan dalam penginputan item ke Cart!';
+        } else {
             $cart_cek = Cart::where('user_id',Auth::user()->id)->where('pelanggan_id',$post['pelanggan_id'])->where('guest_id',$post['guest_id'])->first();
             // dd($post['guest_id']);
+            $create_new_cart = false;
             if ($cart_cek !== null) {
-                CartItem::create([
-                    'cart_id'=>$cart_cek->id,
-                    'item_id'=>$item_to_insert->id,
-                ]);
-                $success_ .= ' Item berhasil diinput ke Cart!';
+                $create_new_cart = false;
             } else {
-                $cart_new = Cart::create([
+                $create_new_cart = true;
+            }
+
+            $cart_related = null;
+            if ($create_new_cart) {
+                $cart_related = Cart::create([
                     'user_id' => Auth::user()->id,
                     'tipe_pelanggan' => $post['tipe_pelanggan'],
                     'pelanggan_id' => $post['pelanggan_id'],
                     'guest_id' => $post['guest_id'],
                 ]);
-                CartItem::create([
-                    'cart_id'=>$cart_new->id,
-                    'item_id' => $item_to_insert->id,
-                ]);
-                $success_ .= ' Item berhasil diinput ke Cart!';
+            } else {
+                $cart_related = $cart_cek;
             }
-        } else {
-            $failed_ .= 'Ada kesalahan dalam penginputan item ke Cart!';
+            $kadar_harga = KadarHarga::where('kadar',$item_to_insert->kadar)->latest()->first();
+            CartItem::create([
+                'cart_id'=>$cart_related->id,
+                'item_id'=>$item_to_insert->id,
+                'ongkos'=>$kadar_harga->ongkos,
+                'harga'=>$kadar_harga->harga,
+                'harga_total'=>$kadar_harga->harga * $item_to_insert->berat,
+            ]);
+            $success_ .= ' Item berhasil diinput ke Cart!';
         }
 
         $feedback=[
