@@ -19,9 +19,9 @@ class CartSeeder extends Seeder
         $carts = [
             [
                 'user_id' => 3,
-                'tipe_pelanggan' => 'customer',
-                'pelanggan_id' => 5,
-                'guest_id' => null,
+                'tipe_pelanggan' => 'guest',
+                'pelanggan_id' => null,
+                'guest_id' => 'A',
             ]
         ];
 

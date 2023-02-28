@@ -110,14 +110,14 @@ class PembelianController extends Controller
             'pelanggan' => $pelanggan,
             'cart' => $cart,
             'goback' => 'pembelians.create',
-            'previous_data' => $cart->id,
+            'previous_data' => ['cart_id' => $cart->id],
             'carts_data' => Cart::getCartsItemPerUser(),
             'pembelian_sebagai' => $get['pembelian_sebagai'],
         ];
         return view('pembelian.konfirmasi_data_pelanggan', $data);
     }
 
-    public function text_methode_pembayaran(Request $request)
+    public function test_methode_pembayaran(Request $request)
     {
         $get = $request->query();
         // dump($get);
@@ -131,7 +131,7 @@ class PembelianController extends Controller
 
         $data = [
             'goback' => 'pembelians.create',
-            'previous_data' => $cart->id,
+            'previous_data' => ['cart_id' => $cart->id],
             'carts_data' => Cart::getCartsItemPerUser(),
             'pelanggan' => $pelanggan,
             'cart' => $cart,

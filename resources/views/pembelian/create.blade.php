@@ -115,8 +115,11 @@
                     <input type="hidden" name="cart_id" value="{{ $cart_id }}">
                     <button type="submit" name="pembelian_sebagai" value="phone" class="bg-sky-500 w-full py-3 rounded text-white text-lg mt-2">Konfirmasi</button>
                 </form>
-                <form action="{{ route('pembelians.test_konfirmasi_data_pelanggan') }}" class="m-0 mt-1">
-                    <button class="bg-violet-500 text-white rounded py-3 w-full font-bold">Test Konfirmasi Data Pelanggan</button>
+                <form action="{{ route('pembelians.test_konfirmasi_data_pelanggan') }}" method="get" class="m-0 mt-1">
+                    <input type="hidden" name="cart_id" value="{{ $cart_id }}">
+                    <button type="submit" name="pembelian_sebagai" value="guest" class="bg-violet-500 text-white rounded py-3 w-full font-bold">
+                        Test Konfirmasi Data Pelanggan
+                    </button>
                 </form>
             </td>
         </tr>
@@ -168,8 +171,11 @@
                     </div>
                     <button type="submit" name="cart_id" value="{{ $cart_id }}" class="bg-emerald-500 text-white w-full py-3 rounded font-bold text-base">Verfikasi Pelanggan</button>
                 </form>
-                <form action="{{ route('pembelians.test_konfirmasi_data_pelanggan') }}" class="m-0 mt-1">
-                    <button class="bg-violet-500 text-white rounded py-3 w-full font-bold">Test Konfirmasi Data Pelanggan</button>
+                <form action="{{ route('pembelians.test_konfirmasi_data_pelanggan') }}" method="get" class="m-0 mt-1">
+                    <input type="hidden" name="cart_id" value="{{ $cart_id }}">
+                    <button type="submit" name="pembelian_sebagai" value="guest" class="bg-violet-500 text-white rounded py-3 w-full font-bold">
+                        Test Konfirmasi Data Pelanggan
+                    </button>
                 </form>
             </td>
         </tr>
