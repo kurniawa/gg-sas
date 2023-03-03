@@ -67,13 +67,13 @@
 <form action="{{ route('pembelians.test_methode_pembayaran') }}" method="get" class="mx-2">
     <input type="hidden" name="pelanggan_id" value="{{ $pelanggan->id }}">
     <input type="hidden" name="cart_id" value="{{ $cart->id }}">
-    <button type="submit" class="bg-violet-500 text-white font-bold rounded w-full py-3 text-base" name="pembelian_sebagai" value="{{ $pembelian_sebagai }}">Test Lanut Methode Bayar Guest</button>
+    <button type="submit" class="bg-violet-500 text-white font-bold rounded w-full py-3 text-base" name="pembelian_sebagai" value="guest">Test Lanjut Methode Bayar Guest</button>
 </form>
 
 <form action="{{ route('pembelians.test_methode_pembayaran') }}" method="get" class="mx-2 mt-1">
     <input type="hidden" name="pelanggan_id" value="{{ $pelanggan->id }}">
     <input type="hidden" name="cart_id" value="{{ $cart->id }}">
-    <button type="submit" class="bg-violet-500 text-white font-bold rounded w-full py-3 text-base" name="pembelian_sebagai" value="{{ $pembelian_sebagai }}">Test Lanut Methode Bayar Cust</button>
+    <button type="submit" class="bg-violet-500 text-white font-bold rounded w-full py-3 text-base" name="pembelian_sebagai" value="customer">Test Lanjut Methode Bayar Cust</button>
 </form>
 
 @endsection

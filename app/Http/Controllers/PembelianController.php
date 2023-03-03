@@ -128,6 +128,10 @@ class PembelianController extends Controller
         $pelanggan = User::where('username', 'dummy')->first();
         $cart = Cart::find($get['cart_id']);
         $cart_items = CartItem::where('cart_id',$cart->id)->get();
+        $total_tagihan = 0;
+        foreach ($cart_items as $cart_item) {
+            $total_tagihan += $cart_item->harga_total;
+        }
 
         $data = [
             'goback' => 'pembelians.create',
@@ -136,6 +140,7 @@ class PembelianController extends Controller
             'pelanggan' => $pelanggan,
             'cart' => $cart,
             'cart_items' => $cart_items,
+            'total_tagihan' => $total_tagihan,
         ];
         return view('pembelian.methode_pembayaran', $data);
     }
