@@ -46,6 +46,14 @@
         </div>
         <div class="font-semibold flex h-1/4 justify-center items-center">Penjualan</div>
     </a>
+    <a href="{{ route('pembelians.index') }}" class="bg-indigo-400 shadow drop-shadow rounded hover:bg-emerald-500 text-white">
+        <div class="mt-3 flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 002.25 2.25h13.5M6 7.5h3v3H6v-3z" />
+            </svg>
+        </div>
+        <div class="font-semibold h-2/5 text-center">Surat Pembelian</div>
+    </a>
     <a href="{{ route('items.index') }}" class="bg-indigo-400 shadow drop-shadow rounded hover:bg-emerald-500 text-white">
         <div class="flex items-center h-3/4 justify-center">
             <div class="w-2/3 h-2/3">

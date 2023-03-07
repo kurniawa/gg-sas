@@ -10,7 +10,7 @@ function hideNavCart() {
 
 function formatHarga(harga) {
     // console.log(harga);
-    harga_ohne_titik = harga.replace(".", "");
+    let harga_ohne_titik = harga.replace(".", "");
     if (harga_ohne_titik.length < 4) {
         return harga;
     }
@@ -63,4 +63,38 @@ function formatNumberK(number, element) {
         element.textContent = formatted_number + "k";
         return true;
     }
+}
+
+function formatNumberHargaRemoveDecimal(harga) {
+    // console.log(harga);
+    let harga_2 = "";
+    if (harga.includes(".")) {
+        let harga_1 = harga.slice(0, harga.indexOf("."));
+        harga_2 = harga.slice(harga.indexOf("."), harga.length);
+        // console.log(harga_1); console.log(harga_2);
+        harga = harga_1;
+        if (parseInt(harga_2[1]) >= 5) {
+            harga = (parseInt(harga) + 1).toString();
+        }
+    }
+    let harga_ohne_titik = harga.replace(".", "");
+    if (harga_ohne_titik.length < 4) {
+        return harga;
+    }
+    let hargaRP = "";
+    let akhir = harga_ohne_titik.length;
+    let posisi = akhir - 3;
+    let jmlTitik = Math.ceil(harga_ohne_titik.length / 3 - 1);
+    // console.log(jmlTitik);
+    for (let i = 0; i < jmlTitik; i++) {
+        hargaRP = "." + harga_ohne_titik.slice(posisi, akhir) + hargaRP;
+        // console.log(hargaRP);
+        akhir = posisi;
+        posisi = akhir - 3;
+    }
+    hargaRP = harga_ohne_titik.slice(0, akhir) + hargaRP;
+    // console.log(hargaRP);
+    return hargaRP;
+    // console.log(harga_2);
+    // return (parseFloat(hargaRP) + harga_2).toString();
 }

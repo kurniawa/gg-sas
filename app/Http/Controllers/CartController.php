@@ -72,12 +72,27 @@ class CartController extends Controller
         } else {
             $request->validate(['error'=>'required'],['error.required'=>'Ada kesalahan input pelanggan!']);
         }
+        $goback = 'carts.pilih_customer';
+        $previous_data = null;
+        $cart_id = null;
+        if (isset($post['goback'])) {
+            $goback = $post['goback'];
+        }
+        if (isset($post['previous_data'])) {
+            $previous_data = $post['previous_data'];
+        }
+        if (isset($post['cart_id'])) {
+            $cart_id = $post['cart_id'];
+        }
         $data = [
-            'goback'=>'carts.pilih_customer',
+            'goback' => $goback,
+            'previous_data' => $previous_data,
+            'cart_id' => $cart_id,
             'carts_data'=>Cart::getCartsItemPerUser(),
             'pelanggan'=>$pelanggan,
             'tipe_pelanggan'=>$post['tipe_pelanggan'],
         ];
+        // dd($data);
         return view('cart.verifikasi_customer', $data);
     }
 
@@ -184,6 +199,7 @@ class CartController extends Controller
             // dd($file);
             // dd($post['warna_mata']);
             // dd($post);
+            $item['berat'] = (int)$item['berat'] * 100; // di database ditetapkan dengan satuan milligram
             $new_item = Item::create($item);
             $success_.='Item baru berhasil diinput!';
             // UPDATE MATA - (IF EXIST)
@@ -301,7 +317,7 @@ class CartController extends Controller
                 'item_id'=>$item_to_insert->id,
                 'ongkos'=>$kadar_harga->ongkos,
                 'harga'=>$kadar_harga->harga,
-                'harga_total'=>$kadar_harga->harga * $item_to_insert->berat,
+                'harga_total'=>($kadar_harga->harga * $item_to_insert->berat) / 100,
             ]);
             $success_ .= ' Item berhasil diinput ke Cart!';
         }
@@ -334,22 +350,57 @@ class CartController extends Controller
         }
 
         $cart_items = CartItem::where('cart_id',$cart->id)->get();
-        $kadar_hargas = [];
-        foreach ($cart->items as $item) {
-            $kadar_harga = KadarHarga::where('kadar',$item->kadar)->first();
-            $kadar_hargas[] = $kadar_harga;
-        }
+        // dd($cart->id);
         $data = [
             'goback'=>'home',
             'carts_data'=>Cart::getCartsItemPerUser(),
             'cart'=>$cart,
             'cart_items'=>$cart_items,
-            'kadar_hargas'=>$kadar_hargas,
             'pelanggan'=>$pelanggan,
             'pelanggan_id'=>$pelanggan_id,
             'guest_id'=>$guest_id,
         ];
         return view('cart.show', $data);
+    }
+
+    public function update_customer(Request $request)
+    {
+        $post = $request->post();
+        $cart = Cart::find($post['cart_id']);
+        // dump($post);
+        // dd($cart);
+        if ($post['tipe_pelanggan'] === 'guest') {
+            if ($cart->tipe_pelanggan === $post['tipe_pelanggan']) {
+                if ($cart->guest_id == $post['guest_id']) {
+                    return back()->with(['errors_'=>'Pelanggan guest terpilih sudah sama seperti yang ada pada cart saat ini!']);
+                }
+            }
+            $cart_pelanggan_sama = Cart::where('user_id', $cart->user_id)->where('tipe_pelanggan',$cart->tipe_pelanggan)->where('guest_id',$post['guest_id'])->where('id','!=',$cart->id)->first();
+            if ($cart_pelanggan_sama !== null) {
+                return back()->with(['errors_'=>'Pelanggan guest terpilih sudah memiliki cart lain!']);
+            }
+        } elseif ($post['tipe_pelanggan'] === 'customer') {
+            if ($cart->tipe_pelanggan === $post['tipe_pelanggan']) {
+                if ($cart->pelanggan_id == $post['pelanggan_id']) {
+                    return redirect()->route('carts.show',$cart->id)->with(['errors_'=>'Pelanggan terpilih sudah sama seperti yang ada pada cart saat ini!']);
+                }
+            }
+            $cart_pelanggan_sama = Cart::where('user_id', $cart->user_id)->where('tipe_pelanggan',$cart->tipe_pelanggan)->where('pelanggan_id',$post['pelanggan_id'])->where('id','!=',$cart->id)->first();
+            if ($cart_pelanggan_sama !== null) {
+                return redirect()->route('carts.show',$cart->id)->with(['errors_'=>'Pelanggan terpilih sudah memiliki cart lain!']);
+            }
+        }
+
+        $cart->tipe_pelanggan = $post['tipe_pelanggan'];
+        $cart->pelanggan_id = $post['pelanggan_id'];
+        $cart->guest_id = $post['guest_id'];
+        $cart->save();
+
+        if ($post['tipe_pelanggan'] === 'customer') {
+            return redirect()->route('carts.show',$cart->id)->with(['success_'=>'Pelanggan telah diupdate!']);
+        }
+        return back()->with(['success_'=>'Pelanggan telah diupdate!']);
+
     }
 
     /**

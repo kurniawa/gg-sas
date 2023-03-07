@@ -97,6 +97,7 @@ class ItemController extends Controller
         // dd($post['warna_mata']);
         // dd($post);
         $success_ = '';
+        $item['berat'] = (int)$item['berat'] * 100; // di database ditetapkan dengan satuan milligram
         $new_item = Item::create($item);
         $success_.='Item baru berhasil diinput!';
         // UPDATE MATA - (IF EXIST)

@@ -45,6 +45,7 @@ Route::resource('pembelians',PembelianController::class)->middleware('admin');
 Route::controller(CartController::class)->group(function(){
     Route::get('/carts/pilih_customer','pilih_customer')->name('carts.pilih_customer')->middleware('admin');
     Route::get('/carts/verifikasi_customer','verifikasi_customer')->name('carts.verifikasi_customer')->middleware('admin');
+    Route::post('/carts/update_customer','update_customer')->name('carts.update_customer')->middleware('admin');
 });
 Route::resource('carts',CartController::class)->middleware('admin');
 Route::resource('carts.items',CartItemController::class)->middleware('admin');

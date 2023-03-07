@@ -3,7 +3,7 @@
 return [
     'name' => 'LaravelPWA',
     'manifest' => [
-        'name' => env('APP_NAME', 'Djewel POS - PWA'),
+        'name' => env('APP_NAME', 'Djewel POS - PWA - SPA By GeulisLab'),
         'short_name' => 'Djewel',
         'start_url' => '/',
         'background_color' => '#ffffff',

@@ -93,13 +93,84 @@
         </div>
     </div>
 
+
     <form action="{{ route('pembelians.store') }}" method="POST" class="mt-2">
         @csrf
+        <div class="flex items-center">
+            <input type="checkbox" name="methode_bayar" id="tunai" value="tunai">
+            <span class="ml-2">Tunai</span>
+        </div>
+        <input type="number" name="jumlah_tunai" id="jumlah_tunai" class="input ml-5" step="1" min="0" value="0">
+        <div class="flex items-center mt-2">
+            <input type="checkbox" name="methode_bayar" id="non-tunai" value="non-tunai">
+            <span class="ml-2">Non-Tunai</span>
+        </div>
+        <div id="daftar-input-pembayaran-non-tunai"></div>
+        <div class="relative w-3/4 ml-5">
+            <div class="border rounded p-3 flex items-center justify-between hover:cursor-pointer hover:bg-slate-100" onclick="toggleEWallet()">
+                <span>Pilih Bank/E-Wallet</span>
+                <div class="border rounded bg-white shadow drop-shadow">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                    </svg>
+                </div>
+            </div>
+            <div id="dd-daftar-ewallet" class="border absolute top-12 bg-white w-full hidden">
+                <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaranNonTunai('bank','bca')" id="bca"><img src="{{ asset('img/logo-bank-bca.png') }}" class="h-full"></div>
+                <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaranNonTunai('bank','bri')" id="bri"><img src="{{ asset('img/logo-bank-bri.png') }}" class="h-full"><span class="font-bold text-blue-800 text-base ml-2">BRI</span></div>
+                <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaranNonTunai('bank','mandiri')" id="mandiri"><img src="{{ asset('img/logo-bank-mandiri.png') }}" class="h-full"></div>
+                <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaranNonTunai('bank','bni')" id="bni"><img src="{{ asset('img/logo-bank-bni.png') }}" class="h-full"></div>
+                <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaranNonTunai('bank','cimb')" id="cimb"><img src="{{ asset('img/logo-bank-cimb.png') }}" class="h-full"></div>
+                <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaranNonTunai('bank','ocbc')" id="ocbc"><img src="{{ asset('img/logo-bank-ocbc.jpg') }}" class="h-full"></div>
+                <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaranNonTunai('bank','bjb')" id="bjb"><img src="{{ asset('img/logo-bank-bjb.png') }}" class="h-full"></div>
+                <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaranNonTunai('bank','maybank')" id="maybank"><img src="{{ asset('img/logo-bank-maybank.svg') }}" class="h-full"></div>
+                <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaranNonTunai('ewallet','gopay')" id="gopay"><img src="{{ asset('img/logo-ewallet-gopay.png') }}" class="h-full"></div>
+                <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaranNonTunai('ewallet','shopee')" id="shopee"><img src="{{ asset('img/logo-ewallet-shopee.png') }}" class="h-full"></div>
+                <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaranNonTunai('ewallet','dana')" id="dana"><img src="{{ asset('img/logo-ewallet-dana.png') }}" class="h-full"></div>
+                <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaranNonTunai('ewallet','ovo')" id="ovo"><img src="{{ asset('img/logo-ewallet-ovo.png') }}" class="h-full"><span class="font-bold text-violet-800 text-base ml-2">OVO</span></div>
+                <div class="flex items-center h-11 border-b py-2 pl-2 hover:bg-slate-100" onclick="tambahPembayaranNonTunai('lain-lain','lain-lain')"><span class="font-bold text-base ml-2">Lain - lain</span></div>
+            </div>
+        </div>
         <input type="hidden" name="cart_id" value="{{ $cart->id }}" readonly>
-        <button class="btn-emerald rounded py-3 w-full text-lg">
+        <button class="btn-emerald rounded py-3 w-full text-lg mt-3">
             Konfirmasi Pembayaran
         </button>
     </form>
 </div>
+
+<script>
+    function toggleEWallet() {
+        $('#dd-daftar-ewallet').toggle(300);
+    }
+
+    function hideEWallet() {
+        $('#dd-daftar-ewallet').hide(300);
+    }
+
+    var div_input_non_tunai = document.getElementById('daftar-input-pembayaran-non-tunai');
+    var html_input = '';
+    function tambahPembayaranNonTunai(tipe, nama_instansi) {
+        if (tipe === 'lain-lain') {
+            html_input += `
+            <div class="ml-5 flex mt-1">
+                <input type="text" name="nama_instansi[]" value="${nama_instansi}" class="input w-1/4">
+                <input type="number" name="jumlah_non_tunai[]" value=0 step=1 min=0 class="input ml-1">
+                <input type="hidden" name="tipe_non_tunai[]" value="${tipe}" readonly>
+            </div>
+            `;
+        } else {
+            html_input += `
+            <div class="ml-5 flex mt-1">
+                <input type="text" name="nama_instansi[]" value="${nama_instansi}" class="input bg-slate-100 w-1/4" readonly>
+                <input type="number" name="jumlah_non_tunai[]" value=0 step=1 min=0 class="input ml-1">
+                <input type="hidden" name="tipe_non_tunai[]" value="${tipe}" readonly>
+            </div>
+            `;
+            document.getElementById(nama_instansi).remove();
+        }
+        div_input_non_tunai.innerHTML = html_input;
+        hideEWallet();
+    }
+</script>
 @endsection
 

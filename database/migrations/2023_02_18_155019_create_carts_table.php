@@ -20,6 +20,7 @@ return new class extends Migration
             // $table->foreignId('pelanggan_id')->nullable()->constrained()->onDelete('cascade');
             $table->foreignId('pelanggan_id')->nullable()->constrained('users')->onDelete('cascade');
             $table->enum('guest_id',['A','B','C','D','E'])->nullable();
+            $table->string('keterangan')->nullable();
         });
     }
 

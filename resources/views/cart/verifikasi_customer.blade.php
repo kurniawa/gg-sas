@@ -27,10 +27,25 @@
     </table>
 </div>
 
+@if ($cart_id !== null)
+<form action="{{ route('carts.update_customer') }}" method="post" class="m-2">
+    @csrf
+    <input type="hidden" name="tipe_pelanggan" value="customer" readonly>
+    <input type="hidden" name="cart_id" value="{{ $cart_id }}" readonly>
+    <input type="hidden" name="guest_id" value="" readonly>
+    <div class="text-center">
+        <button type="submit" class="bg-emerald-500 text-white p-2 rounded" name="pelanggan_id" value="{{ $pelanggan->id }}">Konfirmasi Ubah Pelanggan</button>
+
+    </div>
+</form>
+@else
 <form action="{{ route('carts.create') }}" class="m-2">
     <input type="hidden" name="tipe_pelanggan" value="{{ $tipe_pelanggan }}">
-    <button type="submit" class="btn-emerald rounded" name="pelanggan_id" value="{{ $pelanggan->id }}">Lanjutkan</button>
+    <div class="text-center">
+        <button type="submit" class="bg-emerald-500 text-white p-2 rounded" name="pelanggan_id" value="{{ $pelanggan->id }}">Lanjutkan</button>
+    </div>
 </form>
+@endif
 
 @endsection
 

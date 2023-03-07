@@ -26,6 +26,9 @@
         }
     </style>
 
+    {{-- @livewireStyles
+    @livewireScripts --}}
+
     <title>@yield('title')</title>
 </head>
 
@@ -34,6 +37,7 @@
     <div id="nav_cart_close_layer" class="absolute top-0 bottom-0 left-0 right-0 hidden z-30" onclick="hideNavCart()"></div>
     <nav class="h-11 bg-violet-500 text-white flex justify-between items-center pl-3" x-data="{show_dd:false}">
         <div class="flex items-center">
+            @if (isset($goback))
             @if ($goback!=='')
             @if (isset($previous_data))
             <a href="{{ route($goback, $previous_data) }}" class="text-white font-bold bg-orange-500 rounded p-1">
@@ -45,8 +49,9 @@
                 </svg>
             </a>
             @endif
+            @endif
             <a href="/" class="text-white h-11 flex items-center ml-3"
-                ><span class="font-semibold text-xl">Gol D. Jewel</span></a
+                ><span class="font-semibold text-xl">D~Jewel</span></a
             >
         </div>
         <div class="flex items-center">
@@ -110,7 +115,7 @@
                                         <td>
                                             <div class="toFormatNumberK rounded font-bold bg-pink-100">{{ $carts_data['arr_item_hargas'][$key][$key2]['ongkos'] }}</div>
                                             <div class="toFormatNumberK rounded font-bold bg-orange-100">{{ $carts_data['arr_item_hargas'][$key][$key2]['harga'] }}</div>
-                                            <div class="toFormatNumberK rounded font-bold bg-emerald-100">{{ $carts_data['arr_item_hargas'][$key][$key2]['harga'] * $item->berat }}</div>
+                                            <div class="toFormatNumberK rounded font-bold bg-emerald-100">{{ ($carts_data['arr_item_hargas'][$key][$key2]['harga'] * $item->berat) / 100 }}</div>
                                         </td>
                                         <td>
                                             <form action="{{ route('carts.items.destroy', [$carts_data['arr_cart_items'][$key][$key2]->id, $item->id ]) }}" method="POST" class="m-0" onsubmit="return confirm('Anda yakin ingin menghapus item ini dari Cart?')">
@@ -151,7 +156,7 @@
                 </div>
             </div>
             @endauth
-            <div class="relative" @mouseover="show_dd=true" @mouseleave="show_dd=false">
+            <div class="relative" x-cloak @mouseover="show_dd=true" @mouseleave="show_dd=false">
                 <div class="h-11 flex items-center px-2">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -220,7 +225,7 @@
         </div>
     </nav>
     {{-- END: NAVBAR --}}
-    <img style='position:fixed;width:5rem;top:20%;left:50%;transform:translate(-50%,-50%);' id='loading-progress-icon' src='{{ asset('img/gear_loading-violet.gif') }}' alt=''>
+    {{-- <img style='position:fixed;width:5rem;top:20%;left:50%;transform:translate(-50%,-50%);' id='loading-progress-icon' src='{{ asset('img/gear_loading-violet.gif') }}' alt=''> --}}
     @yield('content')
     <div class="mx-8 rounded mt-5 text-center p-3 bg-indigo-900">
         @auth
@@ -231,6 +236,11 @@
         <span class="text-white">User is not logged in!</span>
         @endguest
     </div>
+
+    {{-- <script type="module">
+        import hotwiredTurbo from 'https://cdn.skypack.dev/@hotwired/turbo';
+    </script>
+    <script src="https://cdn.jsdelivr.net/gh/livewire/turbolinks@v0.1.x/dist/livewire-turbolinks.js" data-turbolinks-eval="false" data-turbo-eval="false"></script> --}}
 </body>
 
 <script>

@@ -70,9 +70,23 @@ class CartItemController extends Controller
      * @param  \App\Models\CartItem  $cartItem
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, CartItem $cartItem)
+    // public function update(Cart $cart, Item $item)
+    // {
+    //     dump('update');
+    //     dump($cart);
+    //     dd($item);
+    // }
+    public function update(Request $request, $cart_item_id)
     {
-        //
+        $post = $request->post();
+        $cart_item = CartItem::find($cart_item_id);
+        $cart_item->ongkos = $post['ongkos'];
+        $cart_item->harga = $post['harga'];
+        $cart_item->harga_total = $post['harga_total'];
+        $cart_item->save();
+        return back()->with(['success_'=>'CartItem berhasil diupdate!']);
+        // dump($post);
+        // dd($cart_item);
     }
 
     /**

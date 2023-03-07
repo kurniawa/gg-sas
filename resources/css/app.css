@@ -1,6 +1,6 @@
 @tailwind base;
 
-body {
+/* body {
     @apply text-sm;
 }
 h1 {
@@ -11,7 +11,7 @@ h2 {
 }
 h3 {
     @apply font-medium text-xl;
-}
+} */
 
 @tailwind components;
 
