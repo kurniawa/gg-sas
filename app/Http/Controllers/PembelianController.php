@@ -28,6 +28,7 @@ class PembelianController extends Controller
         }
 
         $data = [
+            'goback' => 'home',
             'pembelians' => $pembelians,
             'arr_pembelian_items' => $arr_pembelian_items,
             'carts_data' => Cart::getCartsItemPerUser(),
@@ -77,40 +78,41 @@ class PembelianController extends Controller
 
     }
 
-    public function methode_pembayaran(Request $request)
-    {
-        $post = $request->post();
-        // dump($post);
-        /**
-         * Ini kan dari halaman konfirmasi data pelanggan.
-         * Oleh karena itu maka disini di laksanakan step ubah cart->pelanggan_id ke user-id yang dipilih dari pelanggan baru / pelanggan terdaftar.
-         *  */
-        $success_ = '';
-        $pelanggan = null;
-        $cart = Cart::find($post['cart_id']);
-        if ($post['pembelian_sebagai'] === 'phone' || $post['pembelian_sebagai'] === 'customer') {
-            $cart->tipe_pelanggan = 'customer';
-            $cart->pelanggan_id = $post['pelanggan_id'];
-            $cart->guest_id = null;
-            $cart->save();
-            $success_ .= 'Guest telah diubah menjadi Customer.';
-            session()->flash('success_',$success_);
-            $pelanggan = User::find($cart->pelanggan_id);
-        } else {
-            session()->flash('warnings_','Lanjutkan sebagai Guest!');
-        }
-        $cart_items = CartItem::where('cart_id',$cart->id)->get();
+    // SIAP DIHAPUS - METHOD PEMBAYARAN
+    // public function methode_pembayaran(Request $request)
+    // {
+    //     $post = $request->post();
+    //     // dump($post);
+    //     /**
+    //      * Ini kan dari halaman konfirmasi data pelanggan.
+    //      * Oleh karena itu maka disini di laksanakan step ubah cart->pelanggan_id ke user-id yang dipilih dari pelanggan baru / pelanggan terdaftar.
+    //      *  */
+    //     $success_ = '';
+    //     $pelanggan = null;
+    //     $cart = Cart::find($post['cart_id']);
+    //     if ($post['pembelian_sebagai'] === 'phone' || $post['pembelian_sebagai'] === 'customer') {
+    //         $cart->tipe_pelanggan = 'customer';
+    //         $cart->pelanggan_id = $post['pelanggan_id'];
+    //         $cart->guest_id = null;
+    //         $cart->save();
+    //         $success_ .= 'Guest telah diubah menjadi Customer.';
+    //         session()->flash('success_',$success_);
+    //         $pelanggan = User::find($cart->pelanggan_id);
+    //     } else {
+    //         session()->flash('warnings_','Lanjutkan sebagai Guest!');
+    //     }
+    //     $cart_items = CartItem::where('cart_id',$cart->id)->get();
 
-        $data = [
-            'goback' => 'pembelians.create',
-            'previous_data' => $cart->id,
-            'carts_data' => Cart::getCartsItemPerUser(),
-            'pelanggan' => $pelanggan,
-            'cart' => $cart,
-            'cart_items' => $cart_items,
-        ];
-        return view('pembelian.methode_pembayaran', $data);
-    }
+    //     $data = [
+    //         'goback' => 'pembelians.create',
+    //         'previous_data' => $cart->id,
+    //         'carts_data' => Cart::getCartsItemPerUser(),
+    //         'pelanggan' => $pelanggan,
+    //         'cart' => $cart,
+    //         'cart_items' => $cart_items,
+    //     ];
+    //     return view('pembelian.methode_pembayaran', $data);
+    // }
 
     /**
      * Show the form for creating a new resource.
@@ -177,6 +179,13 @@ class PembelianController extends Controller
         $success_ .= 'Pembelian berhasil dibuat!';
         $cart_items = CartItem::where('cart_id', $cart->id)->get();
         foreach ($cart_items as $cart_item) {
+            $item = Item::find($cart_item->item_id);
+            $item->stok = $item->stok - $cart_item->jumlah;
+
+            if ($item->stok <= 0) {
+                $item->stok = 0;
+            }
+            $item->save();
             PembelianItem::create([
                 'pembelian_id' => $pembelian_new->id,
                 'item_id' => $cart_item->id,
@@ -187,7 +196,7 @@ class PembelianController extends Controller
                 'harga_total' => $cart_item->harga_total,
             ]);
         }
-        $success_ .= ' Items pembelian berhasil diinput!';
+        $success_ .= ' Items pembelian berhasil diinput! Stok diupdate!';
 
         // HAPUS CART
         $cart->delete();
