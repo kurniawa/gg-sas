@@ -36,7 +36,7 @@
         Pembelian
         </div>
     </a>
-    <a href="{{ route('items.index') }}" class="bg-indigo-400 shadow drop-shadow rounded hover:bg-emerald-500 text-white">
+    <a href="{{ route('penjualans.index') }}" class="bg-indigo-400 shadow drop-shadow rounded hover:bg-emerald-500 text-white">
         <div class="flex items-center h-3/4 justify-center">
             <div class="w-2/3 h-2/3">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-full h-full">

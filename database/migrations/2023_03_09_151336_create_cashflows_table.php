@@ -13,11 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        // saldo ini merupakan saldo harian, untuk dapat menampilkan saldo awal dan saldo akhir
-        Schema::create('neracas', function (Blueprint $table) {
+        Schema::create('cashflows', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('pembelian_id')->nullable()->constrained()->onDelete('cascade');
+            $table->foreignId('penjualan_id')->nullable()->constrained()->onDelete('cascade');
+            $table->string('nama_transaksi'); // pembelian perhiasan, penjualan perhiasan
+            $table->enum('tipe',['pemasukan', 'pengeluaran']);
             $table->string('wallet',50); // tunai, bca, bri, bni, mandiri, dll
-            $table->integer('saldo');
+            $table->integer('jumlah');
             $table->timestamps();
         });
     }
@@ -29,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('neracas');
+        Schema::dropIfExists('cashflows');
     }
 };

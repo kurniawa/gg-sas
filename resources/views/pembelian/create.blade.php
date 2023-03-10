@@ -107,7 +107,7 @@
         </div>
         <div id="div-non-tunai" class="hidden">
             <div id="daftar-input-pembayaran-non-tunai"></div>
-            <div class="relative w-3/4 ml-5">
+            <div class="relative w-3/4 ml-5 mt-1">
                 <div class="border rounded p-3 flex items-center justify-between hover:cursor-pointer hover:bg-slate-100" onclick="toggleEWallet()">
                     <span>Pilih Bank/E-Wallet</span>
                     <div class="border rounded bg-white shadow drop-shadow">
@@ -170,8 +170,8 @@
     }
 
     var div_input_non_tunai = document.getElementById('daftar-input-pembayaran-non-tunai');
-    var html_input = '';
     function tambahPembayaranNonTunai(tipe, nama_instansi) {
+        var html_input = '';
         if (tipe === 'lain-lain') {
             html_input += `
             <div class="ml-5 flex mt-1">
@@ -190,7 +190,7 @@
             `;
             document.getElementById(nama_instansi).remove();
         }
-        div_input_non_tunai.innerHTML = html_input;
+        div_input_non_tunai.insertAdjacentHTML('beforeend', html_input);
         hideEWallet();
     }
 
@@ -217,7 +217,9 @@
         let arr_jumlah_bayar = document.querySelectorAll('.jumlah-bayar');
         let total_bayar = 0;
         arr_jumlah_bayar.forEach(jumlah_bayar => {
-            total_bayar = total_bayar + parseInt(jumlah_bayar.value);
+            if (jumlah_bayar.value !== '') {
+                total_bayar = total_bayar + parseInt(jumlah_bayar.value);
+            }
         });
         // console.log(total_bayar);
         let sisa_bayar = total_tagihan - total_bayar;

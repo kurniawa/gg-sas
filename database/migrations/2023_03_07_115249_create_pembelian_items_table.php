@@ -17,7 +17,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('pembelian_id')->constrained()->onDelete('cascade');
             $table->foreignId('item_id')->nullable()->constrained()->onDelete('set null');
-            $table->string('item_nama')->nullable(); // sudah ada item_id tetap ada item_nama, untuk mencegah terjadinya perubahan nama item, tapi yang sudah ada di surat pastinya tidak akan berubah
+            $table->string('nama'); // sudah ada item_id tetap ada item_nama, untuk mencegah terjadinya perubahan nama item, tapi yang sudah ada di surat pastinya tidak akan berubah
+            $table->string('specs');
+            $table->string('kode_item', 100);
+            $table->string('main_photo')->nullable();
             $table->smallInteger('jumlah')->default(1);
             $table->integer('ongkos');
             $table->integer('harga');

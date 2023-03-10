@@ -47,40 +47,42 @@
                 </div>
             </td>
             <td>{{ $pembelian->username }}</td>
-            <td>{{ $pembelian->pelanggan->nama }}</td>
+            <td>{{ $pembelian->pelanggan_nama }}</td>
             <td>{{ $pembelian->harga_total / 1000000 }}M</td>
             {{-- TOMBOL DROPDOWN --}}
             <td>
                 <div class="flex items-center">
-                    <div id="btn-dd-{{ $key }}" class="rounded bg-white shadow drop-shadow" onclick="showDropdownMultiple(this.id, 'content-dd-{{ $key }}')">
+                    <button id="btn-dd-{{ $key }}" class="rounded bg-white shadow drop-shadow" onclick="showDropdownMultiple(this.id, 'content-dd-{{ $key }}')">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-6 h-6">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                         </svg>
-                    </div>
+                    </button>
                 </div>
             </td>
         </tr>
         <tr id="content-dd-{{ $key }}" class="hidden">
             <td colspan="5">
-                <table>
-                    @foreach ($arr_pembelian_items[$key] as $item)
-                    <tr>
-                        <td>{{ $item->item_nama }}</td>
-                        <td>
-                            <div>{{ $item->harga / 1000 }}k/g</div>
-                            <div>{{ $item->ongkos / 1000 }}k/g</div>
-                        </td>
-                        <td>{{ $item->harga_total / 1000 }}k</td>
-                    </tr>
-                    @endforeach
-                    <tr>
-                        <td colspan="3">
-                            <div class="flex justify-end">
-                                <button class="bg-sky-500 p-1 rounded text-white">Detail</button>
-                            </div>
-                        </td>
-                    </tr>
-                </table>
+                <form action="{{ route('pembelians.show', $pembelian->id) }}" method="get">
+                    <table>
+                        @foreach ($arr_pembelian_items[$key] as $item)
+                        <tr>
+                            <td>{{ $item->nama }}</td>
+                            <td>
+                                <div>{{ $item->harga / 1000 }}k/g</div>
+                                <div>{{ $item->ongkos / 1000 }}k/g</div>
+                            </td>
+                            <td>{{ $item->harga_total / 1000 }}k</td>
+                        </tr>
+                        @endforeach
+                        <tr>
+                            <td colspan="3">
+                                <div class="flex justify-end">
+                                    <button class="bg-sky-500 p-1 rounded text-white">Detail</button>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </form>
             </td>
         </tr>
         @endforeach

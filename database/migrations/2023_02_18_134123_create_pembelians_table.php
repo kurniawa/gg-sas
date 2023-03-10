@@ -15,8 +15,10 @@ return new class extends Migration
     {
         Schema::create('pembelians', function (Blueprint $table) {
             $table->id();
+            $table->string('no_surat')->unique(); // id.jumlah_item.time()-1.678.420.000
+            $table->bigInteger('time_key'); // id.jumlah_item.time()-1.678.420.000
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('username')->nullable();
+            $table->string('username', 50);
             // $table->enum('tipe_pelanggan',['customer','guest']); // tipe_pelanggan sepertinya juga tidak diperlukan, selama pelanggan_id = null, maka customer belum terdaftar
             $table->foreignId('pelanggan_id')->nullable()->constrained('users')->onDelete('cascade');
             $table->string('pelanggan_nama')->nullable();
@@ -25,6 +27,7 @@ return new class extends Migration
             $table->integer('harga_total');
             $table->integer('total_bayar');
             $table->integer('sisa_bayar');
+            $table->enum('status',['belum-terjual','terjual-semua','terjual-sebagian']);
             $table->timestamps();
         });
     }

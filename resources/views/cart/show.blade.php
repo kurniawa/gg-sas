@@ -158,7 +158,7 @@
                     </div>
                     <table>
                         <tr>
-                            <td>Ongkos</td><td>:</td><td><div class="toFormatCurrencyRp rounded font-bold bg-pink-100">{{ $cart_items[$key]->ongkos }}</div></td>
+                            <td>Ongkos/g</td><td>:</td><td><div class="toFormatCurrencyRp rounded font-bold bg-pink-100">{{ $cart_items[$key]->ongkos }}</div></td>
                         </tr>
                         <tr>
                             <td>Harga/g</td><td>:</td><td><div class="toFormatCurrencyRp rounded font-bold bg-orange-100">{{ $cart_items[$key]->harga }}</div></td>
@@ -182,7 +182,7 @@
                                 <td>Ongkos</td><td>:</td><td><input type="number" step="any" name="ongkos" value="{{ $cart_items[$key]->ongkos }}" class="input w-28" onkeyup="formatOngkos(this.value, {{ $key }})"></td><td><div class="flex justify-between"><span>Rp</span><span id="ongkos-formatted-{{ $key }}">{{ number_format($cart_items[$key]->ongkos,0,',','.') }}</span></div></td>
                                 <td>
                                     <div class="inline-block relative">
-                                        <button class="absolute -top-11 -right-3 bg-red-500 w-6 h-6 rounded-full text-white" onclick="hideEditHarga({{ $key }})">
+                                        <button type="button" class="absolute -top-11 -right-3 bg-red-500 w-6 h-6 rounded-full text-white" onclick="hideEditHarga({{ $key }})">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                                             </svg>

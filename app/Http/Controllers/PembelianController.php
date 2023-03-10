@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cart;
 use App\Models\CartItem;
+use App\Models\Cashflow;
 use App\Models\Item;
 use App\Models\Pembelian;
 use App\Models\PembelianItem;
@@ -20,6 +21,7 @@ class PembelianController extends Controller
      */
     public function index()
     {
+        // dd(time());
         $pembelians = Pembelian::limit(100)->orderBy('created_at', 'desc')->get();
         $arr_pembelian_items = collect();
         foreach ($pembelians as $pembelian) {
@@ -167,6 +169,8 @@ class PembelianController extends Controller
             $pelanggan_nama = $cart->pelanggan->nama;
         }
         $pembelian_new = Pembelian::create([
+            'no_surat' => uniqid(),
+            'time_key' => time(),
             'user_id' => Auth::user()->id,
             'username' => Auth::user()->username,
             'pelanggan_id' => $cart->pelanggan_id,
@@ -176,7 +180,9 @@ class PembelianController extends Controller
             'total_bayar' => (int)$post['total_bayar'],
             'sisa_bayar' => (int)$post['sisa_bayar'],
         ]);
-        $success_ .= 'Pembelian berhasil dibuat!';
+        $success_ .= 'Pembelian baru dibuat!';
+
+
         $cart_items = CartItem::where('cart_id', $cart->id)->get();
         foreach ($cart_items as $cart_item) {
             $item = Item::find($cart_item->item_id);
@@ -189,19 +195,56 @@ class PembelianController extends Controller
             PembelianItem::create([
                 'pembelian_id' => $pembelian_new->id,
                 'item_id' => $cart_item->id,
-                'item_nama' => $cart_item->item->nama,
+                'nama' => $cart_item->item->nama,
+                'specs' => $cart_item->item->specs,
+                'kode_item' => $cart_item->item->kode_item,
+                'main_photo' => $cart_item->item->photos[0]->path,
                 'jumlah' => $cart_item->jumlah,
                 'ongkos' => $cart_item->ongkos,
                 'harga' => $cart_item->harga,
                 'harga_total' => $cart_item->harga_total,
             ]);
         }
-        $success_ .= ' Items pembelian berhasil diinput! Stok diupdate!';
+        $success_ .= ' Items diinput! Stok diupdate!';
+
+        // UPDATE no_surat dan time_key
+        list($no_surat, $time_key) = Pembelian::generate_no_surat($pembelian_new->id,count($cart_items));
+        $pembelian_new->no_surat = $no_surat;
+        $pembelian_new->time_key = $time_key;
+        $pembelian_new->save();
+        $success_ .= ' No Surat Pembelian diupdate!';
+
+        // CASHFLOW
+        if (isset($post['jumlah_tunai'])) {
+            if ($post['jumlah_tunai'] !== null) {
+                Cashflow::create([
+                    'pembelian_id' => $pembelian_new->id,
+                    'nama_transaksi' => 'pembelian perhiasan',
+                    'tipe' => 'pemasukan',
+                    'wallet' => 'tunai',
+                    'jumlah' => $post['jumlah_tunai'],
+                ]);
+            }
+        }
+        if (isset($post['jumlah_non_tunai'])) {
+            foreach ($post['jumlah_non_tunai'] as $key => $jumlah_non_tunai) {
+                if ($jumlah_non_tunai !== null) {
+                    Cashflow::create([
+                        'pembelian_id' => $pembelian_new->id,
+                        'nama_transaksi' => 'pembelian perhiasan',
+                        'tipe' => 'pemasukan',
+                        'wallet' => $post['nama_instansi'][$key],
+                        'jumlah' => $jumlah_non_tunai,
+                    ]);
+                }
+            }
+        }
+        $success_ .= ' Cashflow diupdate!';
 
         // HAPUS CART
         $cart->delete();
         $success_ .= ' Cart dihapus!';
-        return redirect()->route('pembelians.index')->with(['success_', $success_]);
+        return redirect(route('pembelians.index'))->with(['success_', $success_]);
     }
 
     /**
@@ -212,7 +255,14 @@ class PembelianController extends Controller
      */
     public function show(Pembelian $pembelian)
     {
-        //
+        // dd($pembelian);
+        $data = [
+            'goback'=>'pembelians.index',
+            'carts_data' => Cart::getCartsItemPerUser(),
+            'pembelian' => $pembelian,
+        ];
+        // dd($pembelian->items);
+        return view('pembelian.show', $data);
     }
 
     /**

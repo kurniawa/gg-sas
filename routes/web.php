@@ -7,6 +7,7 @@ use App\Http\Controllers\ItemController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PelangganController;
 use App\Http\Controllers\PembelianController;
+use App\Http\Controllers\PenjualanController;
 use App\Models\Cart;
 
 /*
@@ -31,6 +32,7 @@ Route::controller(LoginController::class)->group(function(){
     Route::get('/','home')->name('home');
 });
 
+// ITEMS
 Route::resource('items',ItemController::class)->middleware('auth');
 Route::resource('pelanggans',PelangganController::class)->middleware('admin');
 Route::controller(PembelianController::class)->group(function ()
@@ -49,9 +51,15 @@ Route::controller(CartController::class)->group(function(){
 });
 Route::resource('carts',CartController::class)->middleware('admin');
 Route::resource('carts.items',CartItemController::class)->middleware('admin');
-// ITEMS
 
-
+// PENJUALAN
+Route::controller(PenjualanController::class)->group(function(){
+    Route::get('/penjualans','index')->name('penjualans.index')->middleware('admin');
+    Route::get('/penjualans/pilih-tipe-surat','pilih_tipe_surat')->name('penjualans.pilih_tipe_surat')->middleware('admin');
+    Route::get('/penjualans/create/surat-traditional','create_surat_traditional')->name('penjualans.create_surat_traditional')->middleware('admin');
+    Route::get('/penjualans/create/input-no-surat-digital','input_no_surat_digital')->name('penjualans.input_no_surat_digital')->middleware('admin');
+    Route::get('/penjualans/create/cek-surat-digital','cek_surat_digital')->name('penjualans.cek_surat_digital')->middleware('admin');
+});
 // use App\Http\Livewire\Auth;
 // use App\Http\Livewire\Home;
 // use App\Http\Livewire\Items;
